@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!--                                                                -->
+<configuration>
+    <appender name="QuartzAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [QUARTZ] %-5p [%t]: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="HibernateSQLAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <file>HibernateSQL.log</file>
+        <encoder>
+            <pattern>%d{ISO8601} [HIBERNATE_SQL] %-5p [%t]: %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>50</maxIndex>
+            <FileNamePattern>HibernateSQL.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"/>
+    </appender>
+    <appender name="AspectJAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [ASPECT TRACING] %-5p [%t]: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="IndiePimAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [INDIEPIM] %-5p [%t]: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="SpringAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [SPRING] %-5p [%t]: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="HibernateAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [HIBERNATE] %-5p [%t]: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [DEFAULT] %-5p [%t] %c: %m%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="org.quartz" additivity="false" level="INFO">
+        <appender-ref ref="QuartzAppender"/>
+    </logger>
+    <logger name="org.hibernate.SQL" additivity="false" level="DEBUG">
+        <appender-ref ref="HibernateSQLAppender"/>
+    </logger>
+    <logger name="aspectj" additivity="false" level="TRACE">
+        <appender-ref ref="AspectJAppender"/>
+    </logger>
+    <logger name="net.mortalsilence.indiepim" additivity="false" level="DEBUG">
+        <appender-ref ref="IndiePimAppender"/>
+    </logger>
+    <logger name="org.springframework.orm.jpa" additivity="false" level="DEBUG">
+        <appender-ref ref="SpringAppender"/>
+    </logger>
+    <logger name="org.hibernate" additivity="false" level="ERROR">
+        <appender-ref ref="HibernateAppender"/>
+    </logger>
+    <logger name="org.springframework" additivity="false" level="DEBUG">
+        <appender-ref ref="SpringAppender"/>
+    </logger>
+    <logger name="com.mchange" level="ERROR">
+        <appender-ref ref="IndiePimAppender"/>
+    </logger>
+    <root level="DEBUG">
+        <appender-ref ref="ConsoleAppender"/>
+    </root>
+</configuration>

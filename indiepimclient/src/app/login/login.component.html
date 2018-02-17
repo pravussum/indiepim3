@@ -1,0 +1,11 @@
+<div [hidden]="user" class="text-center signin-wrapper">
+  <form class="form-signin" (submit)="loginNow()">
+    <img class="mb-4" src="/assets/1433_0.jpg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="username" class="sr-only">Email address</label>
+    <input type="text" id="username" name="password" class="form-control" placeholder="Username" required autofocus [(ngModel)]="credentials.user">
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" name="inputPasword" class="form-control" placeholder="Password" [(ngModel)]="credentials.password" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+</div>

@@ -1,0 +1,89 @@
+<h3>Manage message accounts</h3>
+<ul data-bind="foreach: messageAccounts, visible: messageAccounts().length > 0 ">
+  <li *ngFor="let account of accounts">
+    <span class="messageAccountListItem" (click)="onSelect(account)">{{account.accountName}}</span>
+  </li>
+</ul>
+<button class="btn addButtonMargin" (click)="addAccount()">Add...</button>
+<div *ngIf="selectedAccount">
+  <form #accountForm="ngForm">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#msgAccTabGeneral">General</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#msgAccTabConnection">Connection</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#msgAccTabOutgoing">Outgoing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#msgAccTabSynchronisation">Synchronisation</a>
+      </li>
+    </ul>
+    <div id="msgAccTabContent" class="tab-content">
+      <div id="msgAccTabGeneral" class="tab-pane active">
+        <p><label for="accountName">Account name:</label><input type="text" id="accountName" name="accountName" [(ngModel)]="selectedAccount.accountName" class="form-control"/></p>
+        <p><label for="accountUsername">Username:</label><input type="text" id="accountUsername" name="accountUsername" [(ngModel)]="selectedAccount.userName" class="form-control"/></p>
+        <p><label for="accountTag">Tag:</label><input type="text" id="accountTag" name="accountTag" required [(ngModel)]="selectedAccount.tag" class="form-control" #tag="ngModel" /></p>
+        <p><label for="accountEmail">Email address:</label><input type="email" id="accountEmail" name="accountEmail" [(ngModel)]="selectedAccount.email" class="form-control" /></p>
+      </div>
+      <div id="msgAccTabConnection" class="tab-pane">
+        <p><label for="accountPassword">Password:</label><input type="password" id="accountPassword" name="accountPassword" [(ngModel)]="selectedAccount.password" class="form-control"/></p>
+        <p><label for="accountHost">Host:</label><input type="text" id="accountHost" name="accountHost" [(ngModel)]="selectedAccount.host" class="form-control"/></p>
+        <p><label for="accountPort">Port:</label><input type="number" id="accountPort" name="accountPort" [(ngModel)]="selectedAccount.port" class="form-control"/></p>
+        <p><label for="accountAuthMethod">Authentication method:</label>
+          <select id="accountAuthMethod" name="accountAuthMethod" [(ngModel)]="selectedAccount.authentication" class="form-control">
+            <option *ngFor="let authType of authenticationTypes | keys" [value]="authType.key">{{authType.value}}</option>
+          </select>
+        </p>
+        <p><label for="accountEncryption">Encryption:</label>
+          <select id="accountEncryption" name="accountEncryption" [(ngModel)]="selectedAccount.encryption" class="form-control">
+            <option *ngFor="let encryptionType of encryptionTypes | keys" [value]="encryptionType.key">{{encryptionType.value}}</option>
+          </select></p>
+        <p>
+          <button class="btn btn-secondary" data-toggle="button" id="trustInvalidCerts" name="trustInvalidCerts" [(value)]="selectedAccount.trustInvalidSSLCertificates" aria-pressed="false" >
+            Trust invalid SSL certificates</button>
+        </p>
+      </div>
+      <div id="msgAccTabOutgoing" class="tab-pane">
+        <p><label for="outgoingHost">Host:</label><input type="text" id="outgoingHost" name="outgoingHost" [(ngModel)]="selectedAccount.outgoingHost" class="form-control"/></p>
+        <p><label for="outgoingPort">Port (sending):</label><input type="number" id="outgoingPort" name="outgoingPort" [(ngModel)]="selectedAccount.outgoingPort" class="form-control"/></p>
+        <p><label for="outgoingAuthMethod">Authentication method (sending):</label>
+          <select id="outgoingAuthMethod" name="outgoingAuthMethod" [(ngModel)]="selectedAccount.outgoingAuthentication" class="form-control">
+            <option *ngFor="let authType of authenticationTypes | keys" [value]="authType.key">{{authType.value}}</option>
+          </select>
+        </p>
+
+        <p><label for="outgoingEncryption">Encryption (sending): </label>
+          <select id="outgoingEncryption" name="outgoingEncryption" [(ngModel)]="selectedAccount.outgoingEncryption" class="form-control">
+            <option *ngFor="let encryptionType of encryptionTypes | keys" [value]="encryptionType.key">{{encryptionType.value}}</option>
+          </select>
+        </p>
+      </div>
+      <div id="msgAccTabSynchronisation" class="tab-pane">
+        <p><label for="accountSyncMethod">Account sync update method:</label>
+          <select id="accountSyncMethod" name="accountSyncMethod" [(ngModel)]="selectedAccount.syncMethod" class="form-control">
+            <option *ngFor="let syncMethod of syncMethods | keys" [value]="syncMethod.key">{{syncMethod.value}}</option>
+          </select>
+        </p>
+        <p><label for="accountSyncInterval">Account sync interval (minutes):</label>
+          <input type="number" id="accountSyncInterval" name="accountSyncInterval" [(ngModel)]="selectedAccount.syncInterval" class="form-control"/>
+        </p>
+        <p *ngIf="selectedAccount.lastSyncRun">
+          <label for="accountLastSync">Last synchronized</label><span id="accountLastSync">{{selectedAccount.lastSyncRun}}</span>
+        </p>
+        <div id="syncInfoPanel" *ngIf="selectedAccount.syncActive">
+          <p>Synchronizing...</p><span data-bind="text: syncProgress" ></span><p>
+          <div id="syncProgressBar">{{selectedAccount.syncProgress}}</div>
+        </div>
+        <p>{{selectedAccount.lastSyncRun | date:'short'}}</p>
+      </div>
+    </div>
+    <button class="btn btn-danger" (click)="removeAccount()"><i class="fa fa-trash-o mr5"></i>Remove account</button>
+    <button class="btn btn-primary" (click)="saveAccount()"><i class="fa fa-floppy-o mr5"></i>Save account</button>
+  </form>
+  <div *ngIf="tag.invalid && (tag.dirty || tag.touched)" class="alert alert-danger">
+    Tag required.
+  </div>
+</div>
