@@ -74,9 +74,6 @@ public class ConnectionUtils implements MessageConstants {
 		try {
 			transport = session.getTransport(protocol);
 			transport.connect(account.getOutgoingHost(), port, account.getEmail(),password); 
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Mail server login failed: " + e.getMessage());
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Mail server login failed: " + e.getMessage());
@@ -101,12 +98,12 @@ public class ConnectionUtils implements MessageConstants {
         props.setProperty("mail.mime.address.strict", "false");
 
 		/* Authentication */
-		final AuthenticationMode authenticationMode = AuthenticationMode.valueOf(incoming ? account.getAuthentication() : account.getOutgoingAuthentication());
+		final AuthenticationMode authenticationMode = incoming ? account.getAuthentication() : account.getOutgoingAuthentication();
 		final String auth = authenticationMode == AuthenticationMode.PASSWORD_NORMAL ? "true" : "false";
         props.put("mail." + protocol + ".auth", auth);
 
 		/* Encryption */
-		final EncryptionMode encryptionMode = EncryptionMode.valueOf(incoming ? account.getEncryption() : account.getOutgoingEncryption());
+		final EncryptionMode encryptionMode = incoming ? account.getEncryption() : account.getOutgoingEncryption();
             final String starttls = encryptionMode == EncryptionMode.STARTTLS ? "true" : "false";
             props.put("mail." + protocol + ".starttls.enable", starttls);
 
@@ -161,20 +158,18 @@ public class ConnectionUtils implements MessageConstants {
 	}
 
 	public String getIncomingProtocol(final MessageAccountPO account) {
-		final EncryptionMode encryptionMode = EncryptionMode.valueOf(account.getEncryption());
 		if(ArgUtils.empty(account.getProtocol()))
 			throw new RuntimeException("Protocol for account " + account.getName() + " is not set.");
 		if(PROTOCOL_IMAP.equals(account.getProtocol().toUpperCase())) {			
-			return encryptionMode == EncryptionMode.SSL ? "imaps" : "imap";
+			return account.getEncryption() == EncryptionMode.SSL ? "imaps" : "imap";
 		} else if(PROTOCOL_POP3.equals(account.getProtocol().toUpperCase())) {
-			return encryptionMode == EncryptionMode.SSL ? "imaps" : "imap";
+			return account.getEncryption() == EncryptionMode.SSL ? "imaps" : "imap";
 		}
 		throw new NotImplementedException("Protocol " + account.getProtocol() + " not (yet) supported. Valid values are " + PROTOCOL_IMAP + " and " + PROTOCOL_POP3);
 	}
 	
 	public String getOutgoingProtocol(final MessageAccountPO account) {
-		final EncryptionMode encryptionMode = EncryptionMode.valueOf(account.getEncryption());
-		return encryptionMode == EncryptionMode.SSL ? "smtps" : "smtp";
+		return account.getEncryption() == EncryptionMode.SSL ? "smtps" : "smtp";
 	}
 
     public String getFolderPathFromTagLineage(char separator, TagLineagePO tagLineage) {

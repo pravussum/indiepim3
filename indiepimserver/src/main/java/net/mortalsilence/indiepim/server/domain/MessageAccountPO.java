@@ -1,5 +1,7 @@
 package net.mortalsilence.indiepim.server.domain;
 
+import net.mortalsilence.indiepim.server.message.AuthenticationMode;
+import net.mortalsilence.indiepim.server.message.EncryptionMode;
 import net.mortalsilence.indiepim.server.message.MessageDeleteMethod;
 import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
 import org.hibernate.annotations.Cascade;
@@ -13,7 +15,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "msg_account")
-@SuppressWarnings("serial")
 public class MessageAccountPO implements Serializable, PersistentObject {
 
 	@Id
@@ -48,16 +49,20 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 	private Integer outgoingPort;
 	
 	@Column(name = "authentication")
-	private String authentication;
+	@Enumerated(EnumType.STRING)
+	private AuthenticationMode authentication;
 	
 	@Column(name = "outgoing_authentication")
-	private String outgoingAuthentication;
+	@Enumerated(EnumType.STRING)
+	private AuthenticationMode outgoingAuthentication;
 	
 	@Column(name = "encryption")
-	private String encryption;
+	@Enumerated(EnumType.STRING)
+	private EncryptionMode encryption;
 	
 	@Column(name = "outgoing_encryption")
-	private String outgoingEncryption;
+	@Enumerated(EnumType.STRING)
+	private EncryptionMode outgoingEncryption;
 	
 	@Column(name="name")
 	private String name;
@@ -264,35 +269,35 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 		this.outgoingPort = outgoingPort;
 	}
 
-	public String getAuthentication() {
+	public AuthenticationMode getAuthentication() {
 		return authentication;
 	}
 
-	public void setAuthentication(String authentication) {
+	public void setAuthentication(AuthenticationMode authentication) {
 		this.authentication = authentication;
 	}
 
-	public String getOutgoingAuthentication() {
+	public AuthenticationMode getOutgoingAuthentication() {
 		return outgoingAuthentication;
 	}
 
-	public void setOutgoingAuthentication(String outgoingAuthentication) {
+	public void setOutgoingAuthentication(AuthenticationMode outgoingAuthentication) {
 		this.outgoingAuthentication = outgoingAuthentication;
 	}
 
-	public String getEncryption() {
+	public EncryptionMode getEncryption() {
 		return encryption;
 	}
 
-	public void setEncryption(String encryption) {
+	public void setEncryption(EncryptionMode encryption) {
 		this.encryption = encryption;
 	}
 
-	public String getOutgoingEncryption() {
+	public EncryptionMode getOutgoingEncryption() {
 		return outgoingEncryption;
 	}
 
-	public void setOutgoingEncryption(String outgoingEncryption) {
+	public void setOutgoingEncryption(EncryptionMode outgoingEncryption) {
 		this.outgoingEncryption = outgoingEncryption;
 	}
 

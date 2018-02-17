@@ -1,5 +1,8 @@
 package net.mortalsilence.indiepim.server.dto;
 
+import net.mortalsilence.indiepim.server.message.AuthenticationMode;
+import net.mortalsilence.indiepim.server.message.EncryptionMode;
+import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
 import net.mortalsilence.indiepim.server.tags.TagHierarchyTree;
 
 import java.io.Serializable;
@@ -16,15 +19,15 @@ public class MessageAccountDTO implements Serializable {
 	public String outgoingHost;
 	public Integer port;
 	public Integer outgoingPort;
-	public String authentication;
-	public String outgoingAuthentication;
-	public String encryption;
-	public String outgoingEncryption;
+	public AuthenticationMode authentication;
+	public AuthenticationMode outgoingAuthentication;
+	public EncryptionMode encryption;
+	public EncryptionMode outgoingEncryption;
 	public String tag;
 	public String password;
 	public String protocol;
 	public TagHierarchyTree tagHierarchy;
-	public Integer syncMethod;
+	public SyncUpdateMethod syncMethod;
 	public Integer syncInterval;
 	public Date lastSyncRun;
 	public Boolean newMessages;

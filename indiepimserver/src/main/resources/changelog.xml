@@ -1179,4 +1179,7 @@
             <where>user.username = 'admin'</where>
         </update>
     </changeSet>
+    <changeSet id="20180217-1" author="AmIEvil">
+        <modifyDataType tableName="msg_account" columnName="syncMethod" newDataType="varchar(20)" />
+    </changeSet>
 </databaseChangeLog>

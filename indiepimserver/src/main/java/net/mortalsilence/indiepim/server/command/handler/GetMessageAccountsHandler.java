@@ -28,7 +28,7 @@ public class GetMessageAccountsHandler implements Command<GetMessageAccounts, Ge
 		
 		final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserId());
 		
-		final List<MessageAccountDTO> result = new ArrayList<MessageAccountDTO>();
+		final List<MessageAccountDTO> result = new ArrayList<>();
 		
 		for(MessageAccountPO account : accounts) {
 			MessageAccountDTO resultAccount = messageUtils.mapMessageAccountPO2MessageAccountDTO(account);

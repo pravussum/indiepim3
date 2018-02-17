@@ -120,7 +120,9 @@ public class MessageUtils implements MessageConstants {
 		resultAccount.outgoingEncryption = messageAccountPO.getOutgoingEncryption();
 		resultAccount.syncMethod = messageAccountPO.getSyncMethod();
 		resultAccount.syncInterval = messageAccountPO.getSyncInterval();
-		resultAccount.lastSyncRun = messageAccountPO.getMessageAccountStats().getLastSyncRun();
+		if(messageAccountPO.getPassword() != null) {
+			resultAccount.lastSyncRun = messageAccountPO.getMessageAccountStats().getLastSyncRun();
+		}
 		resultAccount.newMessages = messageAccountPO.getNewMessages();
 		resultAccount.trustInvalidSSLCertificates = messageAccountPO.getTrustInvalidSSLCertificates();			
         // do not give the password away! We are only using it in the backend for message account sync.
