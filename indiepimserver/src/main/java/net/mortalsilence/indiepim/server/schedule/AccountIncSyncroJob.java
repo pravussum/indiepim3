@@ -46,12 +46,16 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
         final UserPO user = userDAO.getUser(userId);
         final MessageAccountPO account = messageDAO.getMessageAccount(userId, accountId);
 
-        if(account.getMessageAccountStats().getLastSyncRun() != null) {
-            logger.info("Starting account synchronisation for user " + user.getUserName() + ", account " + account.getName() + ".");
-            msgSynchroService.synchronize(user, account, account.getSyncMethod());
-        } else {
-            logger.info("Starting very first account synchronisation for user " + user.getUserName() + ", account " + account.getName());
-            msgSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
+        try {
+            if(account.getMessageAccountStats() != null && account.getMessageAccountStats().getLastSyncRun() != null) {
+                logger.info("Starting account synchronisation for user " + user.getUserName() + ", account " + account.getName() + ".");
+                msgSynchroService.synchronize(user, account, account.getSyncMethod());
+            } else {
+                logger.info("Starting very first account synchronisation for user " + user.getUserName() + ", account " + account.getName());
+                msgSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
+            }
+        } catch (Exception e) {
+            logger.error(e);
         }
 	}
 }

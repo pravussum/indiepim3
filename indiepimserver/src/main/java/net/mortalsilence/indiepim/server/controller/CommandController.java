@@ -71,8 +71,6 @@ public class CommandController {
     @Inject private DeleteEventHandler deleteEventHandler;
 
 
-    final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
-
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public List<MessageAccountDTO> getMessageAccounts() {
@@ -93,8 +91,7 @@ public class CommandController {
             offset = 0;
         if(pageSize == null || pageSize < 0)
             pageSize = 50;
-        final MessageListResult result = getMessagesHandler.execute(new GetMessages(offset, pageSize, accountId, tagName, tagLineageId, searchTerm, read));
-        return result;
+        return getMessagesHandler.execute(new GetMessages(offset, pageSize, accountId, tagName, tagLineageId, searchTerm, read));
     }
 
     @RequestMapping(value="getMessage/{messageId}", produces = "application/json;charset=UTF-8")

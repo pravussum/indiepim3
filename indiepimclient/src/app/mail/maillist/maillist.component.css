@@ -1,0 +1,100 @@
+/*Add css rules for the panel here*/
+table {
+  width: 100%;
+  table-layout: fixed;
+  border: 0;
+  border-collapse: collapse;
+}
+table td { clear: both;
+  background-color: transparent;
+  padding: 0;
+}
+
+.mailListCell {
+  padding-bottom: 4px;
+  padding-top: 4px;
+}
+
+tr.mailListRow:hover {
+  background-color: #CCCCFF;
+  cursor: pointer;
+}
+
+.readIcon {
+  color: #d3d3d3;
+}
+
+.readCol, .attachmentCol, .deleteCol {
+  width: 20px;
+  text-align: center;
+}
+.fromCol {
+  width: 200px;
+}
+.tagsCol {
+  width: 30px;
+}
+.subjectCol {
+  width: 120px;
+}
+.receivedCol {
+  width: 180px;
+  text-align: right;
+}
+.contentCol {
+
+}
+
+.contentPreview {
+  color: #9b9b9b;
+}
+
+.subject.unread {
+  font-weight: bold;
+}
+
+.fromCol.unread {
+  font-weight: bold;
+}
+
+.tag {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  padding-right: 3px;
+  padding-left: 3px;
+  background-color: #b6b6b6;
+}
+
+.tag, .subject {
+  margin-right: 7px;
+}
+
+/*  header - right */
+.mailIndicatorPanel {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 30px;
+}
+
+.mailIndicatorPanelPos {
+  margin-left: 175px;
+  height: 100%;
+  text-align: right;
+  padding-right: 20px;
+}
+
+/* Tabelle */
+.mailListCurrentViewText{
+  color: #9B9B9B;
+}
+
+.mailTablePanel {
+  position: absolute;
+  margin-top: 40px;
+}
+
+.mailSearchPanel .stylishButton, .mailNavigationPanel .stylishButton {
+  height: 24px;
+  line-height: 22px;
+}

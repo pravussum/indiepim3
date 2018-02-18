@@ -109,7 +109,7 @@ public class MessagePO implements Serializable, PersistentObject {
     private MessagePO relatedMessage;
 
 	@OneToMany( mappedBy="message", cascade=javax.persistence.CascadeType.ALL, targetEntity=AttachmentPO.class)
-	private List<AttachmentPO> attachments = new LinkedList<AttachmentPO>();
+	private List<AttachmentPO> attachments = new LinkedList<>();
 	
 	@Column(name = "size")
 	private Integer size;

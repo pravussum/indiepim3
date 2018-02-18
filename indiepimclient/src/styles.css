@@ -5,3 +5,9 @@
 .mr5 {
   margin-right: 5px;
 }
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

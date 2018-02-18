@@ -47,10 +47,7 @@ public class MessageUtils implements MessageConstants {
 			resultMsg.read = msg.getRead();
             resultMsg.deleted = msg.getDeleted();
             resultMsg.draft = msg.getDraft();
-			if(msg.getAttachments() != null && !msg.getAttachments().isEmpty())
-				resultMsg.hasAttachment = true;
-			else 
-				resultMsg.hasAttachment = false;
+			resultMsg.hasAttachment = msg.getAttachments() != null && !msg.getAttachments().isEmpty();
 			resultMsg.sender = getRealNames(msg.getSender());
             final Set<TagPO> allTags = msg.getAllTags();
             for(TagPO tag : allTags) {
@@ -168,10 +165,9 @@ public class MessageUtils implements MessageConstants {
 		if(folder == null || message == null)
 			throw new IllegalArgumentException("Folder and message must not be null.");
 		if(folder instanceof IMAPFolder){
-			Long uid;
 			try {
-				uid = ((IMAPFolder)folder).getUID(message);
-				return uid == null ? null : uid.toString();
+				Long uid = ((IMAPFolder)folder).getUID(message);
+				return uid.toString();
 			} catch (MessagingException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);

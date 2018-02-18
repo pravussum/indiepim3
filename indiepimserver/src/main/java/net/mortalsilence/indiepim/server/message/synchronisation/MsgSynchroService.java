@@ -235,7 +235,7 @@ public class MsgSynchroService implements MessageConstants {
 		// TODO change everything to IMAP
 		time = System.currentTimeMillis();
 		for(int i=0; i<messages.length; i++)
-			uidMsgMap.put(new Long(folder.getUID(messages[i])), messages[i]);
+			uidMsgMap.put(folder.getUID(messages[i]), messages[i]);
 		if(logger.isDebugEnabled())
 			logger.debug("Reading UIDs took " + (System.currentTimeMillis() - time) + "ms.");
 		

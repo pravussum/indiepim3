@@ -9,7 +9,7 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class NavpanelComponent implements OnInit {
 
-  private user: string;
+  user: string;
   subscription: Subscription;
 
   constructor(private loginService: LoginService) { }

@@ -24,8 +24,6 @@ public class GetAllMessagesHandler implements Command<GetMessages, MessageListRe
     private MessageDAO messageDAO;
     @Inject
     private MessageUtils messageUtils;
-    @Inject
-    SessionRegistry sessionRegistry;
 
     @Transactional (readOnly = true)
 	@Override

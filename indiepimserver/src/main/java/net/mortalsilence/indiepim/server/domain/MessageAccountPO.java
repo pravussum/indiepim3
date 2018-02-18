@@ -107,7 +107,7 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 	private Boolean newMessages;
 	
 	@Column(name = "trustInvalidSSLCertificates")
-	private Boolean trustInvalidSSLCertificates;
+	private boolean trustInvalidSSLCertificates = false;
 
     @OneToOne (optional = false)
     @JoinColumn(name = "msg_account_stats_id", referencedColumnName = "id")
@@ -157,11 +157,11 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 		this.newMessages = newMessages;
 	}
 
-	public Boolean getTrustInvalidSSLCertificates() {
+	public boolean getTrustInvalidSSLCertificates() {
 		return trustInvalidSSLCertificates;
 	}
 
-	public void setTrustInvalidSSLCertificates(Boolean trustInvalidSSLCertificates) {
+	public void setTrustInvalidSSLCertificates(boolean trustInvalidSSLCertificates) {
 		this.trustInvalidSSLCertificates = trustInvalidSSLCertificates;
 	}
 

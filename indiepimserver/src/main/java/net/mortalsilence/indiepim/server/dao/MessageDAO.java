@@ -97,7 +97,7 @@ public class MessageDAO {
 			.getResultList();
 	}
 
-    public List searchForMessages(final Long userId, final String searchExpression, final Integer firstResult, final Integer maxResults) {
+    public List<MessagePO> searchForMessages(final Long userId, final String searchExpression, final Integer firstResult, final Integer maxResults) {
 
         // TODO sort!
         final FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
@@ -116,6 +116,7 @@ public class MessageDAO {
 
         /* execute search */
 
+		//noinspection unchecked
 		return persistenceQuery
 				.setFirstResult(firstResult)
 				.setMaxResults(maxResults)

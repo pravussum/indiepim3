@@ -12,7 +12,9 @@ import {UnauthorizedInterceptor} from "./unauthorizedinterceptor";
 import {MaillistComponent} from './mail/maillist/maillist.component';
 import {NavpanelComponent} from './navpanel/navpanel.component';
 import {LoginService} from "./login/login.service";
-import {KeysPipe} from "./pipes/keyspipe";
+import {KeysPipe} from "./pipes/keys.pipe";
+import {RelativeDatePipe} from "./pipes/relative-date.pipe";
+import {SmartDatePipe} from "./pipes/smart-date.pipe";
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -32,7 +34,9 @@ export class XhrInterceptor implements HttpInterceptor {
     AccountsComponent,
     MaillistComponent,
     NavpanelComponent,
-    KeysPipe
+    KeysPipe,
+    RelativeDatePipe,
+    SmartDatePipe
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,9 @@ export class XhrInterceptor implements HttpInterceptor {
     }
   ],
   exports: [
-    KeysPipe
+    KeysPipe,
+    RelativeDatePipe,
+    SmartDatePipe
   ],
   bootstrap: [AppComponent]
 })

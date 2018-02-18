@@ -1,3 +1,37 @@
-<p>
-  maillist works!
-</p>
+<div class="mailIndicatorPanel">
+  <div class="mailIndicatorPanelPos">
+    <i class="fa" *ngIf="loading"></i>
+    <span class="mailListCurrentViewText ellipsis">{{currentViewDisplayText}}</span>
+    <span id="sparkline"></span>
+  </div>
+</div>
+<div class="mailTablePanel">
+  <table width="100%">
+    <tbody>
+    <tr class="mailListRow" *ngFor="let mailListItem of mailListItems">
+      <td class="mailListCell readCol">
+        <i class="fa" (click)="toggleRead(mailListItem)" [class.read]="mailListItem.read"></i>
+      </td>
+      <td class="mailListCell fromCol" [class.unread]="!mailListItem.read">
+        <div (click)="viewSelectedMail(mailListItem)" class="ellipsis">{{mailListItem.sender}}</div>
+      </td>
+      <td class="mailListCell contentCol" (click)="viewSelectedMail(mailListItem)">
+        <div class="ellipsis">
+          <span class="tags">
+            <span class="tag" *ngFor="let tag of mailListItem.tags" [style.background-color]="tag.color">{{tag.tag}}</span>
+          </span>
+          <span class="subject" [style.unread]="" [class.unread]="!mailListItem.read">{{mailListItem.subject}}</span>
+          <span class="contentPreview">{{mailListItem.contentPreview}}</span>
+        </div>
+      </td>
+      <td class="mailListCell receivedCol" (click)="viewSelectedMail(mailListItem)">{{mailListItem.dateReceived | smartDate:2}}</td>
+      <td class="mailListCell deleteCol">
+        <i class="fa fa-trash-o" (click)="deleteMessage(mailListItem)"></i>
+      </td>
+      <td class="mailListCell attachmentCol">
+        <i class='fa fa-paperclip' *ngIf="mailListItem.hasAttachment"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
