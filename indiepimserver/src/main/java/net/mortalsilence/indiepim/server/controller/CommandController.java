@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mortalsilence.indiepim.server.calendar.synchronisation.CalSynchroService;
+import net.mortalsilence.indiepim.server.controller.dto.GetMessageRequest;
 import net.mortalsilence.indiepim.server.dto.*;
 import net.mortalsilence.indiepim.server.calendar.ICSParser;
 import net.mortalsilence.indiepim.server.command.actions.*;
@@ -36,7 +37,7 @@ import java.util.*;
  * Time: 22:04
  * To change this template use File | Settings | File Templates.
  */
-@Controller
+@RestController
 @RequestMapping("/api/command")
 public class CommandController {
 
@@ -77,21 +78,17 @@ public class CommandController {
         return getMessageAccountsHandler.execute(new GetMessageAccounts()).getAccounts();
     }
 
-    @RequestMapping(value="getMessages", produces = "application/json;charset=UTF-8")
+    @RequestMapping(value="getMessages", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
-    public MessageListResult getMessages(@RequestParam(value = "accountId", required = false) Long accountId,
-                              @RequestParam(value = "tagName", required = false) String tagName,
-                              @RequestParam(value = "tagLineageId", required = false) Long tagLineageId,
-                              @RequestParam(value = "searchTerm", required = false) String searchTerm,
-                              @RequestParam(value = "read", required = false) Boolean read,
-                              @RequestParam(value = "offset", required = false) Integer offset,
-                              @RequestParam(value = "pageSize", required = false) Integer pageSize
-                              ) {
+    public MessageListResult getMessages(@RequestBody GetMessageRequest request) {
+        Long offset = request.getOffset();
         if(offset == null || offset < 0)
-            offset = 0;
+            offset = 0L;
+        Integer pageSize = request.getPageSize();
         if(pageSize == null || pageSize < 0)
             pageSize = 50;
-        return getMessagesHandler.execute(new GetMessages(offset, pageSize, accountId, tagName, tagLineageId, searchTerm, read));
+        return getMessagesHandler.execute(new GetMessages(offset, pageSize, request.getAccountId(), request.getTagName(),
+                request.getTagLineageId(), request.getSearchTerm(), request.getRead()));
     }
 
     @RequestMapping(value="getMessage/{messageId}", produces = "application/json;charset=UTF-8")
@@ -284,7 +281,7 @@ public class CommandController {
 
     @RequestMapping(value="getEvents", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    /**
+    /*
      * start milliseconds from unix epoch
      * end milliseconds from unix epoch
      */

@@ -41,12 +41,13 @@ tr.mailListRow:hover {
   width: 180px;
   text-align: right;
 }
-.contentCol {
 
+.lightText {
+  color: #9b9b9b;
 }
 
-.contentPreview {
-  color: #9b9b9b;
+.subject {
+  color: black;
 }
 
 .subject.unread {
@@ -63,6 +64,7 @@ tr.mailListRow:hover {
   padding-right: 3px;
   padding-left: 3px;
   background-color: #b6b6b6;
+  color: white;
 }
 
 .tag, .subject {
@@ -97,4 +99,12 @@ tr.mailListRow:hover {
 .mailSearchPanel .stylishButton, .mailNavigationPanel .stylishButton {
   height: 24px;
   line-height: 22px;
+}
+
+.mailPaginationPanel {
+  text-align: center;
+}
+
+.mailPaginationPanel nav {
+  display: inline-block;
 }

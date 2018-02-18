@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 @Named
 public class MessageDAO {
 
@@ -36,11 +37,11 @@ public class MessageDAO {
 			.getSingleResult();
 	}
 
-	public List<MessagePO> getAllMessages(final Long userId, final Integer firstResult, final Integer maxResults) {
+	public List<MessagePO> getAllMessages(final Long userId, final Long firstResult, final Integer maxResults) {
 
 		return em.createQuery("from MessagePO where user.id = ?1 order by dateReceived desc", MessagePO.class)
 			.setParameter(1, userId)
-			.setFirstResult(firstResult)
+			.setFirstResult(firstResult.intValue())
 			.setMaxResults(maxResults)
 			.getResultList();
 	}
@@ -52,12 +53,12 @@ public class MessageDAO {
    			.getSingleResult();
    	}
 
-   	public List<MessagePO> getMessagesByReadFlag(final Long userId, final Boolean read, final Integer firstResult, final Integer maxResults) {
+   	public List<MessagePO> getMessagesByReadFlag(final Long userId, final Boolean read, final Long firstResult, final Integer maxResults) {
 
    		return em.createQuery("from MessagePO where user.id = ?1 and read = ?2 order by dateReceived desc", MessagePO.class)
    			.setParameter(1, userId)
             .setParameter(2, read)
-   			.setFirstResult(firstResult)
+   			.setFirstResult(firstResult.intValue())
    			.setMaxResults(maxResults)
    			.getResultList();
    	}
@@ -69,12 +70,12 @@ public class MessageDAO {
 			.getSingleResult();
 	}
 
-	public List<MessagePO> getMessagesForAccount(final Long userId, final Long accountId, final Integer firstResult, final Integer maxResults) {
+	public List<MessagePO> getMessagesForAccount(final Long userId, final Long accountId, final Long firstResult, final Integer maxResults) {
 
 		return  em.createQuery("from MessagePO where user.id = ?1 and messageAccount.id = ?2 order by dateReceived desc", MessagePO.class)
 			.setParameter(1, userId)
 			.setParameter(2, accountId)
-			.setFirstResult(firstResult)
+			.setFirstResult(firstResult.intValue())
 			.setMaxResults(maxResults)
 			.getResultList();
 	}	
@@ -88,16 +89,16 @@ public class MessageDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<MessagePO> getMessagesForTag(final Long userId, final String tag, final Integer firstResult, final Integer maxResults) {
+	public List<MessagePO> getMessagesForTag(final Long userId, final String tag, final Long firstResult, final Integer maxResults) {
 		return em.createNativeQuery("select m.* from msg_tag_view v, tag t, message m where v.user_id = ?1 and t.id = v.tag_id and t.tag = ?2 and m.id = v.message_id order by m.date_received desc", MessagePO.class)
 			.setParameter(1, userId)
 			.setParameter(2, tag)
-			.setFirstResult(firstResult)
+			.setFirstResult(firstResult.intValue())
 			.setMaxResults(maxResults)
 			.getResultList();
 	}
 
-    public List<MessagePO> searchForMessages(final Long userId, final String searchExpression, final Integer firstResult, final Integer maxResults) {
+    public List<MessagePO> searchForMessages(final Long userId, final String searchExpression, final Long firstResult, final Integer maxResults) {
 
         // TODO sort!
         final FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
@@ -118,7 +119,7 @@ public class MessageDAO {
 
 		//noinspection unchecked
 		return persistenceQuery
-				.setFirstResult(firstResult)
+				.setFirstResult(firstResult.intValue())
 				.setMaxResults(maxResults)
 				.getResultList();
     }
@@ -233,11 +234,11 @@ public class MessageDAO {
 			.getSingleResult();
 	}
 
-	public List<MessagePO> getMessagesForTagLineage(final Long userId, final Long tagLineageId, final Integer firstResult, final Integer maxResults) {
+	public List<MessagePO> getMessagesForTagLineage(final Long userId, final Long tagLineageId, final Long firstResult, final Integer maxResults) {
 		return  em.createQuery("select m from MessagePO m join m.msgTagLineageMappings map where m.user.id = ?1 and map.tagLineage.id =?2 order by m.dateReceived desc", MessagePO.class)
 			.setParameter(1, userId)
 			.setParameter(2, tagLineageId)
-			.setFirstResult(firstResult)
+			.setFirstResult(firstResult.intValue())
 			.setMaxResults(maxResults)
 			.getResultList();
 	}	

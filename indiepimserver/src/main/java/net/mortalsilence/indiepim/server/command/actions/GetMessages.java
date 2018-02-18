@@ -9,7 +9,7 @@ public class GetMessages extends AbstractSessionAwareAction<MessageListResult> {
 	public GetMessages() {
 		
 	}
-	private Integer offset;
+	private Long offset;
 	private Integer pageSize;
 	private Long accountId;
 	private String tagName;
@@ -21,7 +21,7 @@ public class GetMessages extends AbstractSessionAwareAction<MessageListResult> {
 		return pageSize;
 	}
 	
-	public GetMessages(Integer offset, Integer pageSize, Long accountId, String tagName, Long tagLineageId, String searchTerm, Boolean read) {
+	public GetMessages(Long offset, Integer pageSize, Long accountId, String tagName, Long tagLineageId, String searchTerm, Boolean read) {
 		this.offset = offset;
 		this.pageSize = pageSize;
 		this.accountId = accountId;
@@ -31,7 +31,7 @@ public class GetMessages extends AbstractSessionAwareAction<MessageListResult> {
         this.read = read;
 	}
 	
-	public Integer getOffset() {
+	public Long getOffset() {
 		return offset;
 	}
 

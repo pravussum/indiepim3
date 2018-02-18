@@ -8,7 +8,6 @@ import net.mortalsilence.indiepim.server.domain.MessagePO;
 import net.mortalsilence.indiepim.server.dto.MessageListDTO;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
 import org.apache.log4j.Logger;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;

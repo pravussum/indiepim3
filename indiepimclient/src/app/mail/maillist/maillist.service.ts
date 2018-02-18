@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {MessageAccount} from "../accounts/messageaccount";
 import {HttpClient} from "@angular/common/http";
 import {MailListResult} from "./maillistitem";
+import {MaillistView} from "./maillistview";
 
 @Injectable()
 export class MaillistService {
@@ -10,7 +10,15 @@ export class MaillistService {
   constructor(private http: HttpClient) {
   }
 
-  getMessages(): Observable<MailListResult> {
-    return this.http.post<MailListResult>("/api/command/getMessages", {pageSize: 50});
+  getMessages(mailListView: MaillistView, offset? : number, pageSize? : number): Observable<MailListResult> {
+    return this.http.post<MailListResult>("/api/command/getMessages", {
+      accountId: mailListView.accountId,
+      tagName: mailListView.tagName,
+      tagLineageId: mailListView.tagLineageId,
+      searchTerm:  mailListView.searchTerm,
+      read: mailListView.read,
+      offset: offset,
+      pageSize: pageSize
+    });
   }
 }
