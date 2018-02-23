@@ -93,13 +93,9 @@ public class CommandController {
 
     @RequestMapping(value="getMessage/{messageId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Object getMessage(@PathVariable(value = "messageId") final Long messageId) {
-        try {
-            final MessageDTOResult result = getMessageHandler.execute(new GetMessage(messageId));
-            return result.getMessageDTO();
-        } catch (CommandException e) {
-            return new ErrorResult(e.getMessage());
-        }
+    public MessageDTO getMessage(@PathVariable(value = "messageId") final Long messageId) throws CommandException {
+        final MessageDTOResult result = getMessageHandler.execute(new GetMessage(messageId));
+        return result.getMessageDTO();
     }
 
     @RequestMapping(value="createDraft", produces = "application/json;charset=UTF-8")
@@ -367,5 +363,10 @@ public class CommandController {
         } catch(IOException ioe) {
             throw new RuntimeException(ioe);
         }
+    }
+
+    @RequestMapping(value="reIndexAllMessages")
+    public void reindexAllMessages() {
+        messageDAO.reindexAllMessages();
     }
 }

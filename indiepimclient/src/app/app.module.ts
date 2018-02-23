@@ -15,6 +15,8 @@ import {LoginService} from "./login/login.service";
 import {KeysPipe} from "./pipes/keys.pipe";
 import {RelativeDatePipe} from "./pipes/relative-date.pipe";
 import {SmartDatePipe} from "./pipes/smart-date.pipe";
+import { MailviewComponent } from './mail/mailview/mailview.component';
+import {SafePipe} from "./pipes/safe.pipe";
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -36,7 +38,9 @@ export class XhrInterceptor implements HttpInterceptor {
     NavpanelComponent,
     KeysPipe,
     RelativeDatePipe,
-    SmartDatePipe
+    SmartDatePipe,
+    SafePipe,
+    MailviewComponent
   ],
   imports: [
     BrowserModule,

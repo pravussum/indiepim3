@@ -4,6 +4,8 @@ import net.mortalsilence.indiepim.server.domain.*;
 import org.apache.log4j.Logger;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.hibernate.*;
+import org.hibernate.search.FullTextSession;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -123,6 +125,26 @@ public class MessageDAO {
 				.setMaxResults(maxResults)
 				.getResultList();
     }
+
+    public void reindexAllMessages() {
+		final FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(em.unwrap(Session.class));
+		fullTextSession.setFlushMode(FlushMode.MANUAL);
+		fullTextSession.setCacheMode(CacheMode.IGNORE);
+
+		//Scrollable results will avoid loading too many objects in memory
+		ScrollableResults results = fullTextSession.createCriteria(MessagePO.class)
+				.setFetchSize(100)
+				.scroll(ScrollMode.FORWARD_ONLY);
+		int index = 0;
+		while(results.next()) {
+			index++;
+			fullTextSession.index(results.get(0)); //index each element
+			if (index % 100 == 0) {
+				fullTextSession.flushToIndexes(); //apply changes to indexes
+				fullTextSession.clear(); //free memory since the queue is processed
+			}
+		}
+	}
 
     public Long searchForMessagesTotalCount(final Long userId, final String searchExpression) {
 

@@ -3,6 +3,7 @@ import {MailListItem} from "./maillistitem";
 import {MaillistService} from "./maillist.service";
 import {SmartDatePipe} from "../../pipes/smart-date.pipe";
 import {MaillistView} from "./maillistview";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 
 @Component({
   selector: 'app-maillist',
@@ -17,109 +18,51 @@ export class MaillistComponent implements OnInit {
   mailListItems: MailListItem[];
   loading: boolean = false;
   currentView: MaillistView;
-
   pageSize = 50;
-  totalSize: number;
-  constructor(private maillistService: MaillistService) { }
 
-  offset = 0;
-
-  search(query) {
-    // reset total size
-    this.currentView = new MaillistView(query);
-    this.totalSize = undefined;
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  getMailsForAccount(accId) {
-    // reset total size
-    this.currentView = new MaillistView(null, accId);
-    this.totalSize = undefined;
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  getMailsForTagLineageId(tagLineageId) {
-    // reset total size
-    this.currentView = new MaillistView(null, null, null, tagLineageId);
-    this.totalSize = undefined;
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  getMailsByReadFlag(readFlag) {
-    this.currentView = new MaillistView(null, null, null, null, readFlag);
-    this.totalSize = undefined;
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  getAllMails() {
-    this.currentView = new MaillistView();
-    this.totalSize = undefined;
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  pagingfrom():number {
-    return this.offset + 1;
-  }
-
-  pagingTo(): number {
-    return Math.min(this.offset + this.pageSize, this.totalSize);
-  }
-
-  showFromTo(): boolean {
-    // return typeof this.totalSize !== 'undefined';
-    return this.totalSize > this.pageSize;
-  }
-
-  nextPage() {
-    let newOffset = this.offset + this.pageSize;
-    if(newOffset >= this.totalSize)
-      return;
-    this.offset = newOffset;
-    this.getMessages();
-  }
-
-  prevPage() {
-    let newOffset = this.offset - this.pageSize;
-    if(newOffset < 0)
-      return;
-    this.offset = newOffset;
-    this.getMessages();
-  };
-
-  firstPage() {
-    this.offset = 0;
-    this.getMessages();
-  }
-
-  lastPage() {
-    let newOffset = this.totalSize - this.pageSize;
-    if(newOffset < 0){
-      newOffset = 0;
-    }
-    this.offset = newOffset;
-    this.getMessages();
-  }
+  constructor(private maillistService: MaillistService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
-    if(!this.currentView) {
-      this.getAllMails();
-    }
-    else {
+    this.route.paramMap.subscribe((params) => {
+      this.updateCurrentViewFromRoute(params);
       this.getMessages();
+    });
+  }
+
+  search(query) {
+    this.currentView = new MaillistView(query);
+    this.getMessages();
+  }
+
+  updateCurrentViewFromRoute(params: ParamMap) {
+    if(!params) {
+      this.currentView = new MaillistView();
+      return;
+    }
+    if(params.get('query')) {
+      this.currentView = new MaillistView(params.get('query'));
+    } else if(params.get('accountid')) {
+      this.currentView = new MaillistView(undefined, +params.get('accountid'));
+    } else if(params.get('tagName')) {
+      this.currentView = new MaillistView(undefined, undefined, params.get('tagName'));
+    } else if(params.get('taglineageid')) {
+      this.currentView = new MaillistView(undefined, undefined, undefined, +params.get('taglineageid'))
+    } else if(params.get('readFlag')) {
+      this.currentView = new MaillistView(undefined, undefined, undefined, undefined, !!params.get('readFlag'))
+    } else {
+      this.currentView = new MaillistView();
     }
   }
+
 
   private getMessages() {
     this.loading = true;
-    this.maillistService.getMessages(this.currentView, this.offset, this.pageSize)
+    this.maillistService.getMessages(this.currentView, this.pageSize)
       .subscribe(data => {
         this.mailListItems = data.messages;
-        this.totalSize = data.totalCount;
+        this.currentView.totalSize = data.totalCount;
       }, (error) => {
         console.log(error);
       }, () => {
@@ -128,7 +71,7 @@ export class MaillistComponent implements OnInit {
   }
 
   viewSelectedMail(mailListItem: MailListItem) {
-    console.log("Viewing mail " + mailListItem.msgId)
+    this.router.navigate((['frontend/mailview/' + mailListItem.msgId]));
   }
 
 
@@ -138,5 +81,54 @@ export class MaillistComponent implements OnInit {
 
   toggleRead(mailListItem: MailListItem) {
     console.log("Toggle read " + mailListItem.msgId)
+  }
+
+  /*
+   *
+   *  Pagination stuff
+   *
+   */
+
+  pagingfrom():number {
+    return this.currentView.offset;
+  }
+
+  pagingTo(): number {
+    return Math.min(this.currentView.offset + this.pageSize, this.currentView.totalSize);
+  }
+
+  showFromTo(): boolean {
+    // return typeof this.totalSize !== 'undefined';
+    return this.currentView.totalSize > this.pageSize;
+  }
+
+  nextPage() {
+    let newOffset = this.currentView.offset + this.pageSize;
+    if(newOffset >= this.currentView.totalSize)
+      return;
+    this.currentView.offset = newOffset;
+    this.getMessages();
+  }
+
+  prevPage() {
+    let newOffset = this.currentView.offset - this.pageSize;
+    if(newOffset < 0)
+      return;
+    this.currentView.offset = newOffset;
+    this.getMessages();
+  };
+
+  firstPage() {
+    this.currentView.offset = 0;
+    this.getMessages();
+  }
+
+  lastPage() {
+    let newOffset = this.currentView.totalSize - this.pageSize;
+    if(newOffset < 0){
+      newOffset = 0;
+    }
+    this.currentView.offset = newOffset;
+    this.getMessages();
   }
 }

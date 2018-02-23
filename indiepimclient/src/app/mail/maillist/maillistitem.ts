@@ -6,7 +6,7 @@ export class MailListItem {
   read: boolean;
   deleted: boolean;
   draft: boolean;
-  tags?: string[];
+  tags?: MaillistItemTag[];
   hasAttachment: boolean;
   contentPreview?: string;
 }

@@ -11,3 +11,20 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.fillParent {
+  position: absolute;
+  display: block;
+  width: auto;
+  height: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+html, body {
+  height: 100%;
+  margin:0;
+  padding:0;
+}

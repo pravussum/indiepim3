@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../login/login.service";
 import {Subscription} from "rxjs/Subscription";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navpanel',
@@ -12,7 +13,8 @@ export class NavpanelComponent implements OnInit {
   user: string;
   subscription: Subscription;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService,
+              private router: Router) { }
 
   ngOnInit() {
     this.subscription = this.loginService.loggedInAnnounced$.subscribe(user => {
@@ -31,6 +33,10 @@ export class NavpanelComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
+  }
+
+  search(query: string) {
+    this.router.navigate((['frontend/maillist/search/' + query]));
   }
 
 }

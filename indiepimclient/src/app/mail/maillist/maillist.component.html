@@ -1,29 +1,30 @@
-<div class="mailPaginationPanel" *ngIf="showFromTo()">
-  <nav>
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" (click)="firstPage()" href="#" tabindex="-1"><i class="fa fa-angle-double-left"></i></a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" (click)="prevPage()" href="#" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-      </li>
-      <li class="page-item disabled"><a class="page-link" href="#">
-        <span>{{pagingfrom()}}</span> to <span>{{pagingTo()}}</span> of <span>{{totalSize}}</span>
-      </a></li>
-      <li class="page-item">
-        <a class="page-link" (click)="nextPage()" href="#" tabindex="-1"><i class="fa fa-angle-right"></i></a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" (click)="lastPage()" href="#" tabindex="-1"><i class="fa fa-angle-double-right"></i></a>
-      </li>
-    </ul>
-  </nav>
-</div>
-<div class="mailIndicatorPanel">
-  <div class="mailIndicatorPanelPos">
-    <i class="fa fa-spinner fa-spin" *ngIf="loading"></i>
-    <span class="mailListCurrentViewText ellipsis">{{currentView.getDisplayText()}}</span>
-    <span id="sparkline"></span>
+<div class="mailListHeader">
+  <div class="mailListHeaderDummy"></div>
+  <div class="mailPaginationPanel" >
+    <nav *ngIf="showFromTo()">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="firstPage()" tabindex="-1"><i class="fa fa-angle-double-left"></i></a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="prevPage()" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+        </li>
+        <li class="page-item disabled"><a class="page-link" href="#">
+          <span>{{pagingfrom()}}</span> to <span>{{pagingTo()}}</span> of <span>{{currentView.totalSize}}</span>
+        </a></li>
+        <li class="page-item">
+          <a class="page-link" (click)="nextPage()" tabindex="-1"><i class="fa fa-angle-right"></i></a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="lastPage()" tabindex="-1"><i class="fa fa-angle-double-right"></i></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="mailIndicatorPanel">
+      <i class="fa fa-circle-o-notch fa-spin" *ngIf="loading"></i>
+      <span class="mailListCurrentViewText ellipsis">{{currentView.getDisplayText()}}</span>
+      <span id="sparkline"></span>
   </div>
 </div>
 <div class="mailTablePanel">

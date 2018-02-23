@@ -10,14 +10,14 @@ export class MaillistService {
   constructor(private http: HttpClient) {
   }
 
-  getMessages(mailListView: MaillistView, offset? : number, pageSize? : number): Observable<MailListResult> {
+  getMessages(mailListView: MaillistView, pageSize?: number): Observable<MailListResult> {
     return this.http.post<MailListResult>("/api/command/getMessages", {
       accountId: mailListView.accountId,
       tagName: mailListView.tagName,
       tagLineageId: mailListView.tagLineageId,
       searchTerm:  mailListView.searchTerm,
       read: mailListView.read,
-      offset: offset,
+      offset: mailListView.offset,
       pageSize: pageSize
     });
   }

@@ -1,10 +1,16 @@
 export class MaillistView {
 
+  private _offset: number;
+  private _totalSize: number;
+
   constructor(private _searchTerm? : string,
               private _accountId? : number,
               private _tagName? : string,
               private _tagLineageId? : number,
-              private _read?: boolean) { }
+              private _read?: boolean) {
+
+    this._offset = 0;
+  }
 
   isViewAll() {
     return !(this._searchTerm || this._accountId || this._tagName || this._tagLineageId || this._read);
@@ -51,5 +57,21 @@ export class MaillistView {
 
   get read(): boolean {
     return this._read;
+  }
+
+  set offset(value: number) {
+    this._offset = value;
+  }
+
+  get offset(): number {
+    return this._offset;
+  }
+
+  get totalSize(): number {
+    return this._totalSize;
+  }
+
+  set totalSize(value: number) {
+    this._totalSize = value;
   }
 }

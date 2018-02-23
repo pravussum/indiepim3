@@ -71,29 +71,13 @@ tr.mailListRow:hover {
   margin-right: 7px;
 }
 
-/*  header - right */
-.mailIndicatorPanel {
-  position: absolute;
-  right: 0;
-  width: 50%;
-  height: 30px;
-}
-
-.mailIndicatorPanelPos {
-  margin-left: 175px;
-  height: 100%;
-  text-align: right;
-  padding-right: 20px;
-}
-
 /* Tabelle */
+
 .mailListCurrentViewText{
   color: #9B9B9B;
 }
-
 .mailTablePanel {
-  position: absolute;
-  margin-top: 40px;
+  margin: 0 20px;
 }
 
 .mailSearchPanel .stylishButton, .mailNavigationPanel .stylishButton {
@@ -103,8 +87,32 @@ tr.mailListRow:hover {
 
 .mailPaginationPanel {
   text-align: center;
+  flex-grow: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mailPaginationPanel nav {
-  display: inline-block;
+.mailListHeaderDummy {
+  width: 200px;
+  flex-grow: 1;
+}
+
+.mailIndicatorPanel {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.mailListHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 20px;
+}
+
+:host {
+  display: block;
+  flex-direction: column;
 }

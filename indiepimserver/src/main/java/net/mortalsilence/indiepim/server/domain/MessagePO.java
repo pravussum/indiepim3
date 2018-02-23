@@ -77,7 +77,7 @@ public class MessagePO implements Serializable, PersistentObject {
 	
 	@ManyToOne(optional=false)
 	@JoinColumn(name="user_id", referencedColumnName="id")
-    @IndexedEmbedded
+    @IndexedEmbedded(includeEmbeddedObjectId=true )
 	private net.mortalsilence.indiepim.server.domain.UserPO user;
 	
 	@ManyToOne(optional=false)
@@ -92,7 +92,7 @@ public class MessagePO implements Serializable, PersistentObject {
 			inverseJoinColumns = 
 			@JoinColumn(name="tag_id", referencedColumnName="ID")
 		)
-	private List<TagPO> tags = new LinkedList<TagPO>();
+	private List<TagPO> tags = new LinkedList<>();
 
 	@ManyToMany(fetch= FetchType.LAZY)
     @Cascade({CascadeType.ALL})
