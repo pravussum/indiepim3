@@ -4,25 +4,36 @@ import net.mortalsilence.indiepim.server.domain.TagHierarchyPO;
 import net.mortalsilence.indiepim.server.domain.TagLineagePO;
 import net.mortalsilence.indiepim.server.domain.TagPO;
 import net.mortalsilence.indiepim.server.dto.TagDTO;
-import net.mortalsilence.indiepim.server.tags.TagHierarchyTree;
+import net.mortalsilence.indiepim.server.tags.TagHierarchyNode;
+import net.mortalsilence.indiepim.server.tags.TagHierarchyNodeHelper;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.*;
 
+@Service
 public class TagUtils {
 
-	public static TagHierarchyTree getTagHierarchyTree(final TagHierarchyPO tagHierarchy) {
-		TagHierarchyTree tree = new TagHierarchyTree();
+	private final TagHierarchyNodeHelper tagHierarchyNodeHelper;
+
+	@Inject
+	public TagUtils(TagHierarchyNodeHelper tagHierarchyNodeHelper) {
+		this.tagHierarchyNodeHelper = tagHierarchyNodeHelper;
+	}
+
+	public TagHierarchyNode getTagHierarchyTree(final TagHierarchyPO tagHierarchy) {
+		TagHierarchyNode tree = new TagHierarchyNode();
 		
-		List<TagLineagePO> tagLineages = new ArrayList<TagLineagePO>(tagHierarchy.getTagLineages());
+		List<TagLineagePO> tagLineages = new ArrayList<>(tagHierarchy.getTagLineages());
 		Collections.sort(tagLineages);
 		
 		for(TagLineagePO tagLineage : tagLineages) {
-			tree.addPath(tagLineage.getLineage(), tagLineage.getId());
+			tagHierarchyNodeHelper.addPath(tree, tagLineage.getLineage(), tagLineage.getId());
 		}
 		return tree;
 	}
 	
-	public static Collection<TagDTO> mapTagPO2TagDTOList(final Collection<TagPO> tagPOs) {
+	public Collection<TagDTO> mapTagPO2TagDTOList(final Collection<TagPO> tagPOs) {
 		
 		final Collection<TagDTO> result = new LinkedList<TagDTO>();
 		final Iterator<TagPO> it = tagPOs.iterator();

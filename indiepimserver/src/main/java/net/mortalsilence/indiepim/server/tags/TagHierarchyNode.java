@@ -42,14 +42,14 @@ public class TagHierarchyNode extends Node<TagHierarchyNodeData> {
         super.setChildren(children);
     }
 
-    @JsonProperty("title")
+    @JsonProperty("name")
     public String getName() {
         if(data == null)
             return null;
         return data.tag;
     }
 
-    @JsonProperty("nodes")
+    @JsonProperty("children")
     public List<TagHierarchyNode> getChildNodes() {
         if(super.getChildren() == null || super.getChildren().isEmpty())
             return null;
@@ -81,5 +81,11 @@ public class TagHierarchyNode extends Node<TagHierarchyNodeData> {
 
     public void setId(final Long id) {
         data.id = id;
+    }
+
+    @Override
+    @JsonIgnore
+    public int getNumberOfChildren() {
+        return super.getNumberOfChildren();
     }
 }

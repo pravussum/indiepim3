@@ -1,3 +1,5 @@
+import {TagHierarchyNode} from "../accounttree/taghierarchynode";
+
 export enum ENCRYPTION_TYPE {NONE = "NONE", STARTTLS = "STARTTLS", TLS = "TLS", SSL = "SSL"}
 
 export enum AUTHENTICATION_TYPE {NONE = "NONE", PASSWORD_NORMAL = "PASSWORD_NORMAL"}
@@ -19,7 +21,7 @@ export class MessageAccount {
   outgoingEncryption?: ENCRYPTION_TYPE;
   tag?: string;
   password?: string;
-  tagHierarchy?: string;
+  tagHierarchy?: TagHierarchyNode;
   syncMethod?: SYNC_UPDATE_METHOD;
   syncInterval?: number;
   lastSyncRun?: string;

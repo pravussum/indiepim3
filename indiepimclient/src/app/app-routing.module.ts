@@ -4,6 +4,7 @@ import {LoginComponent} from './login/login.component';
 import {AccountsComponent} from "./mail/accounts/accounts.component";
 import {MaillistComponent} from "./mail/maillist/maillist.component";
 import {MailviewComponent} from "./mail/mailview/mailview.component";
+import {AccounttreeComponent} from "./mail/accounttree/accounttree.component";
 
 const routes: Routes = [
   {path: 'frontend/login', component: LoginComponent},

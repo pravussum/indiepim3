@@ -15,8 +15,14 @@ import java.util.Collection;
 @Service
 public class GetTagsHandler implements Command<GetTags, TagDTOListResult> {
 
+    private final TagDAO tagDAO;
+    private final TagUtils tagUtils;
+
     @Inject
-    private TagDAO tagDAO;
+    public GetTagsHandler(TagDAO tagDAO, TagUtils tagUtils) {
+        this.tagDAO = tagDAO;
+        this.tagUtils = tagUtils;
+    }
 
     @Transactional(readOnly = true)
 	@Override
@@ -29,7 +35,7 @@ public class GetTagsHandler implements Command<GetTags, TagDTOListResult> {
         } else {
             tags = tagDAO.getAllTags(ActionUtils.getUserId());
         }
-        return new TagDTOListResult(TagUtils.mapTagPO2TagDTOList(tags));
+        return new TagDTOListResult(tagUtils.mapTagPO2TagDTOList(tags));
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 /*@import '~bootstrap-toogle/css/bootstrap-toogle.css';*/
+@import '~angular-tree-component/dist/angular-tree-component.css';
 
 .mr5 {
   margin-right: 5px;

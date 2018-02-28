@@ -3,7 +3,7 @@ package net.mortalsilence.indiepim.server.dto;
 import net.mortalsilence.indiepim.server.message.AuthenticationMode;
 import net.mortalsilence.indiepim.server.message.EncryptionMode;
 import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
-import net.mortalsilence.indiepim.server.tags.TagHierarchyTree;
+import net.mortalsilence.indiepim.server.tags.TagHierarchyNode;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -26,7 +26,7 @@ public class MessageAccountDTO implements Serializable {
 	public String tag;
 	public String password;
 	public String protocol;
-	public TagHierarchyTree tagHierarchy;
+	public TagHierarchyNode tagHierarchy;
 	public SyncUpdateMethod syncMethod;
 	public Integer syncInterval;
 	public Date lastSyncRun;

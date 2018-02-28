@@ -112,6 +112,21 @@ tr.mailListRow:hover {
   margin: 0 20px;
 }
 
+.mailListAndTreeWrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+.mailListWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.accountTree {
+
+}
+
 :host {
   display: block;
   flex-direction: column;

@@ -1,59 +1,67 @@
-<div class="mailListHeader">
-  <div class="mailListHeaderDummy"></div>
-  <div class="mailPaginationPanel" >
-    <nav *ngIf="showFromTo()">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" (click)="firstPage()" tabindex="-1"><i class="fa fa-angle-double-left"></i></a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" (click)="prevPage()" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-        </li>
-        <li class="page-item disabled"><a class="page-link" href="#">
-          <span>{{pagingfrom()}}</span> to <span>{{pagingTo()}}</span> of <span>{{currentView.totalSize}}</span>
-        </a></li>
-        <li class="page-item">
-          <a class="page-link" (click)="nextPage()" tabindex="-1"><i class="fa fa-angle-right"></i></a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" (click)="lastPage()" tabindex="-1"><i class="fa fa-angle-double-right"></i></a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="mailIndicatorPanel">
-      <i class="fa fa-circle-o-notch fa-spin" *ngIf="loading"></i>
-      <span class="mailListCurrentViewText ellipsis">{{currentView.getDisplayText()}}</span>
-      <span id="sparkline"></span>
-  </div>
-</div>
-<div class="mailTablePanel">
-  <table width="100%">
-    <tbody>
-    <tr class="mailListRow" *ngFor="let mailListItem of mailListItems">
-      <td class="mailListCell readCol">
-        <i class="fa" (click)="toggleRead(mailListItem)" [class.read]="mailListItem.read"></i>
-      </td>
-      <td class="mailListCell fromCol" [class.unread]="!mailListItem.read">
-        <div (click)="viewSelectedMail(mailListItem)" class="ellipsis">{{mailListItem.sender}}</div>
-      </td>
-      <td class="mailListCell" (click)="viewSelectedMail(mailListItem)">
-        <div class="ellipsis lightText">
+<div class="mailListAndTreeWrapper">
+  <app-accounttree class="accountTree"></app-accounttree>
+  <div class="mailListWrapper">
+    <div class="mailListHeader">
+      <div class="mailListHeaderDummy"></div>
+      <div class="mailPaginationPanel">
+        <nav *ngIf="showFromTo()">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" (click)="firstPage()" tabindex="-1"><i class="fa fa-angle-double-left"></i></a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" (click)="prevPage()" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+            </li>
+            <li class="page-item disabled"><a class="page-link" href="#">
+              <span>{{pagingfrom()}}</span> to <span>{{pagingTo()}}</span> of <span>{{currentView.totalSize}}</span>
+            </a></li>
+            <li class="page-item">
+              <a class="page-link" (click)="nextPage()" tabindex="-1"><i class="fa fa-angle-right"></i></a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" (click)="lastPage()" tabindex="-1"><i class="fa fa-angle-double-right"></i></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="mailIndicatorPanel">
+        <i class="fa fa-circle-o-notch fa-spin" *ngIf="loading"></i>
+        <span class="mailListCurrentViewText ellipsis">{{currentView.getDisplayText()}}</span>
+        <span id="sparkline"></span>
+      </div>
+    </div>
+    <div class="mailTablePanel">
+      <table width="100%">
+        <tbody>
+        <tr class="mailListRow" *ngFor="let mailListItem of mailListItems">
+          <td class="mailListCell readCol">
+            <i class="fa" (click)="toggleRead(mailListItem)" [class.read]="mailListItem.read"></i>
+          </td>
+          <td class="mailListCell fromCol" [class.unread]="!mailListItem.read">
+            <div (click)="viewSelectedMail(mailListItem)" class="ellipsis">{{mailListItem.sender}}</div>
+          </td>
+          <td class="mailListCell" (click)="viewSelectedMail(mailListItem)">
+            <div class="ellipsis lightText">
           <span class="tags">
-            <span class="tag" *ngFor="let tag of mailListItem.tags" [style.background-color]="tag.color">{{tag.tag}}</span>
+            <span class="tag" *ngFor="let tag of mailListItem.tags"
+                  [style.background-color]="tag.color">{{tag.tag}}</span>
           </span>
-          <span class="subject" [class.unread]="!mailListItem.read">{{mailListItem.subject}}</span>
-          <span class="lightText">{{mailListItem.contentPreview}}</span>
-        </div>
-      </td>
-      <td class="mailListCell receivedCol" (click)="viewSelectedMail(mailListItem)">{{mailListItem.dateReceived | smartDate:2}}</td>
-      <td class="mailListCell deleteCol">
-        <i class="fa fa-trash-o" (click)="deleteMessage(mailListItem)"></i>
-      </td>
-      <td class="mailListCell attachmentCol">
-        <i class='fa fa-paperclip' *ngIf="mailListItem.hasAttachment"></i>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+              <span class="subject" [class.unread]="!mailListItem.read">{{mailListItem.subject}}</span>
+              <span class="lightText">{{mailListItem.contentPreview}}</span>
+            </div>
+          </td>
+          <td class="mailListCell receivedCol" (click)="viewSelectedMail(mailListItem)">{{mailListItem.dateReceived |
+            smartDate:2}}
+          </td>
+          <td class="mailListCell deleteCol">
+            <i class="fa fa-trash-o" (click)="deleteMessage(mailListItem)"></i>
+          </td>
+          <td class="mailListCell attachmentCol">
+            <i class='fa fa-paperclip' *ngIf="mailListItem.hasAttachment"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

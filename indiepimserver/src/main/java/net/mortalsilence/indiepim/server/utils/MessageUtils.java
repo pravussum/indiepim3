@@ -30,11 +30,16 @@ import java.util.*;
 @Named
 public class MessageUtils implements MessageConstants {
 
-    @Inject
-    private EncryptionService encryptionService;
 
-	final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
-	
+    private final EncryptionService encryptionService;
+    private final TagUtils tagUtils;
+
+	@Inject
+	public MessageUtils(EncryptionService encryptionService, TagUtils tagUtils) {
+		this.encryptionService = encryptionService;
+		this.tagUtils = tagUtils;
+	}
+
 	public List<MessageListDTO> mapMessagePOtoMessageDTOList(List<MessagePO> messages) {
 		final List<MessageListDTO> result = new ArrayList<MessageListDTO>();
 		if(messages == null)
@@ -126,8 +131,11 @@ public class MessageUtils implements MessageConstants {
         // can be overriden but not read from the clients
 		resultAccount.outgoingHost = messageAccountPO.getOutgoingHost();
 		resultAccount.tag = messageAccountPO.getTag().getTag();
-		if(messageAccountPO.getTagHierarchy() != null)
-			resultAccount.tagHierarchy = TagUtils.getTagHierarchyTree(messageAccountPO.getTagHierarchy());
+		if(messageAccountPO.getTagHierarchy() != null) {
+			resultAccount.tagHierarchy = tagUtils.getTagHierarchyTree(messageAccountPO.getTagHierarchy());
+			resultAccount.tagHierarchy.setId(9999999L);
+			resultAccount.tagHierarchy.setName(messageAccountPO.getName());
+		}
 		resultAccount.version = messageAccountPO.getTsUpdate();
 		return resultAccount;
 	}
@@ -205,8 +213,7 @@ public class MessageUtils implements MessageConstants {
 		lst.add(subject);
 		lst.add(dateStr);
 		final String concat = StringHelper.mySqlConcatWs(lst, ";");
-		final String result = StringHelper.md5(concat);
-		return result;
+		return StringHelper.md5(concat);
 	}
 
 	public String getSenderStr(final Message message) throws MessagingException {

@@ -17,6 +17,8 @@ import {RelativeDatePipe} from "./pipes/relative-date.pipe";
 import {SmartDatePipe} from "./pipes/smart-date.pipe";
 import { MailviewComponent } from './mail/mailview/mailview.component';
 import {SafePipe} from "./pipes/safe.pipe";
+import { AccounttreeComponent } from './mail/accounttree/accounttree.component';
+import {TreeModule} from "angular-tree-component";
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -40,14 +42,16 @@ export class XhrInterceptor implements HttpInterceptor {
     RelativeDatePipe,
     SmartDatePipe,
     SafePipe,
-    MailviewComponent
+    MailviewComponent,
+    AccounttreeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    TreeModule
   ],
   providers: [
     LoginService,
