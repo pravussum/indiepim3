@@ -1,0 +1,57 @@
+<!--<div id="wrapper">-->
+<!--<div>-->
+
+<!--</div>-->
+
+<!--</div>-->
+  <!--<div style="background-color: lime; ">-->
+    <!--<p>Some text</p>-->
+    <!--<p>And some more text</p>-->
+  <!--</div>-->
+  <!--<iframe src="https://jsfiddle.net/about" style="flex-grow: 1; border: none; margin: 0; padding: 0;"></iframe>-->
+  <div data-bind="with: message" style="display:flex; flex-grow: 1; flex-direction: column"  *ngIf="currentMail">
+    <div style="display:flex; justify-content: space-between; padding: 10px">
+      <!--<div class="attachmentPanel">-->
+      <!--<ul>-->
+      <!--<li class="attachment ellipsis" *ngFor="let attachment of currentMail.attachments">-->
+      <!--<a [href]="'/api/command/getAttachment/' + attachment.id" target="_blank">-->
+      <!--<i class="fa fa-paperclip" ></i>-->
+      <!--<span class="attachmentFilename">{{attachment.filename}}</span>-->
+      <!--</a>-->
+      <!--</li>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <!--</div>-->
+      <div>
+        <div>
+          <h4>{{currentMail.subject}}</h4>
+        </div>
+        <div>Von: <span>{{currentMail.senderEmail}}</span></div>
+        <div>An: <span *ngFor="let receiver of currentMail.receiver">{{receiver}}</span></div>
+        <div>
+          <!--<input id="tagBox" data-bind="select2: tags, select2options: $root.select2Options"/>-->
+          <!--<button id="editTagsButton" class="stylishButton" data-bind="click: $root.editMessageTags"><i class="fa fa-pencil"></i> </button>-->
+        </div>
+      </div>
+      <div>
+        {{currentMail.dateReceived | date:'short'}}
+        <div class="btn-group dropleft">
+          <button type="button" class="btn" (click)="reply()"><i class="fa fa-reply mr5"></i>Reply</button>
+          <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="replyAll()"><i class="fa fa-mail-reply-all mr5"></i>Reply all</a>
+            <a class="dropdown-item" (click)="forward()"><i class="fa fa-forward mr5"></i>Forward</a>
+            <a class="dropdown-item" (click)="delete()"><i class="fa fa-trash-o mr5"></i>Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="iFrameWrapper" class="messageIFrameWrapper">
+      <iframe id="messageIFrame" class="messageIFrame" [src]="mailContentUrl | safe"></iframe>
+    </div>
+  </div>
+  <div *ngIf="!currentMail">
+    No message selected...
+  </div>
