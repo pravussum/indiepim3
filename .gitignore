@@ -8,3 +8,4 @@ target/**
 indiepimserver/net.mortalsilence.indiepim.server.domain.*
 indiepimclient/node_modules
 indiepimclient/node
+indiepimserver/net.mortalsilence.indiepim.server.domain.MessagePO/**
