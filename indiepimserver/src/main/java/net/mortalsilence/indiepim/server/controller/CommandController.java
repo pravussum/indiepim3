@@ -46,7 +46,6 @@ public class CommandController {
     @Inject private GetAllMessagesHandler getMessagesHandler;
     @Inject private GetMessageHandler getMessageHandler;
     @Inject private CreateOrUpdateMessageAccountHandler createMsgAccountHandler;
-    @Inject private GetCometMessagesHandler getCometMessageHandler;
     @Inject private CreateOrUpdateUserHandler createUserHandler;
     @Inject private GetUsersHandler getUsersHandler;
     @Inject private UserDAO userDAO;
@@ -155,18 +154,6 @@ public class CommandController {
     public BooleanResult syncMessageAccount(@PathVariable(value = "accountId") final Long accountId,
                                      @RequestParam(value ="full", required = false) final Boolean fullSync) {
         return accountSyncHandler.execute(new StartAccountSynchronisation(accountId, fullSync));
-    }
-
-    @RequestMapping(value="getCometMessages", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public String getCometMessages(HttpSession session) {
-        final CometMessagesResult result = getCometMessageHandler.execute(new GetCometMessages(session.getId()));
-        final ObjectMapper jsonMapper = new ObjectMapper();
-        try {
-            return jsonMapper.writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            return "{\"error\": \"" + e.getMessage() + "\"}";
-        }
     }
 
     @RequestMapping(value="importics", consumes = "multipart/form-data", produces = "text/html;charset=UTF-8")

@@ -1,6 +1,6 @@
 package net.mortalsilence.indiepim.server.comet;
 
-public class AccountSyncProgressMessage implements CometMessage {
+public class AccountSyncProgressMessage implements PushMessage {
 
 	private Long userId;
 	private Long accountId;

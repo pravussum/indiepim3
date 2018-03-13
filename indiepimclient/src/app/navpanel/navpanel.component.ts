@@ -39,4 +39,7 @@ export class NavpanelComponent implements OnInit {
     this.router.navigate((['frontend/maillist/search/' + query]));
   }
 
+  socketMessage() {
+    this.loginService.socketMessage("huppifluppi");
+  }
 }

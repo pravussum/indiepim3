@@ -2,8 +2,8 @@ package net.mortalsilence.indiepim.server.message.synchronisation;
 
 import com.google.common.collect.Lists;
 import com.sun.mail.imap.IMAPFolder;
+import net.mortalsilence.indiepim.server.PushMessageService;
 import net.mortalsilence.indiepim.server.comet.AccountSyncProgressMessage;
-import net.mortalsilence.indiepim.server.comet.CometService;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.TagLineagePO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
@@ -11,8 +11,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.mail.*;
-import java.util.*;
+import javax.mail.FetchProfile;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class NewMessageHandler {
@@ -20,13 +25,13 @@ public class NewMessageHandler {
     private final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
     private final PersistenceHelper persistenceHelper;
-    private final CometService cometService;
+    private final PushMessageService pushMessageService;
 
     @Inject
     public NewMessageHandler(PersistenceHelper persistenceHelper,
-                             CometService cometService) {
+                             PushMessageService pushMessageService) {
         this.persistenceHelper = persistenceHelper;
-        this.cometService = cometService;
+        this.pushMessageService = pushMessageService;
     }
 
     public boolean handleNewMessages(final Map<Long, Message> uidMsgMap,
@@ -56,17 +61,15 @@ public class NewMessageHandler {
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
-            final Iterator<Long> it = uidSubList.iterator();
 
-            while (it.hasNext()) {
+            for (Long anUidSubList : uidSubList) {
                 /* Update clients every second */
                 i++;
                 if (System.currentTimeMillis() - cometEventTime > 1000) {
-                    cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
+                    pushMessageService.sendMessage(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
                     cometEventTime = System.currentTimeMillis();
                 }
-                Long msgUid = it.next();
-                final Message message = uidMsgMap.get(msgUid);
+                final Message message = uidMsgMap.get(anUidSubList);
 
                 try {
                     newMessages |= persistenceHelper.persistMessage(account,
@@ -77,12 +80,12 @@ public class NewMessageHandler {
                             addressHandler,
                             session,
                             user,
-                            msgUid,
+                            anUidSubList,
                             message,
                             hashCache);
                 } catch (Exception e) {
                     // log and do not fail the whole sync because of one invalid message
-                    logger.error("Persisting message " + msgUid + " in folder " + folder.getName() + " failed.", e);
+                    logger.error("Persisting message " + anUidSubList + " in folder " + folder.getName() + " failed.", e);
                 }
             }
         }

@@ -11,7 +11,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).do((event : HttpEvent<any>) => {
-      //console.log(event);
+      //console.dir(event);
     },  (err: any) => {
       if(err.status === 401) {
         console.log("Unauthorized");

@@ -2,14 +2,14 @@ package net.mortalsilence.indiepim.server.command.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.mortalsilence.indiepim.server.comet.CometMessage;
+import net.mortalsilence.indiepim.server.comet.PushMessage;
 import net.mortalsilence.indiepim.server.command.Result;
 
 import java.util.Collection;
 
 public class CometMessagesResult implements Result {
 
-	@JsonProperty("cometMessages") private Collection<CometMessage> cometMessages;
+	@JsonProperty("cometMessages") private Collection<PushMessage> pushMessages;
     @JsonProperty("isHeartbeat") private boolean isHeartbeat;
     @JsonProperty("isError") private boolean isError;
     @JsonProperty("errorMessage") private String errorMessage;
@@ -42,20 +42,20 @@ public class CometMessagesResult implements Result {
 	}
 
     @JsonIgnore
-	public CometMessagesResult(Collection<CometMessage> messages) {
+	public CometMessagesResult(Collection<PushMessage> messages) {
 		super();
-		this.cometMessages = messages;
+		this.pushMessages = messages;
 	}
 
 	public CometMessagesResult() {
 	}
 
     @JsonIgnore
-    public Collection<CometMessage> getCometMessages() {
-        return cometMessages;
+    public Collection<PushMessage> getPushMessages() {
+        return pushMessages;
     }
 
-    public void setCometMessages(Collection<CometMessage> cometMessages) {
-        this.cometMessages = cometMessages;
+    public void setPushMessages(Collection<PushMessage> pushMessages) {
+        this.pushMessages = pushMessages;
     }
 }

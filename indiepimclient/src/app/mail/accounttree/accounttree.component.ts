@@ -21,10 +21,7 @@ export class AccounttreeComponent implements OnInit {
 
   ngOnInit() {
     this.accountsService.getAccounts().subscribe((accounts: MessageAccount[]) => {
-        console.log("getAccounts returned");
         for (let account of accounts) {
-          console.log("account " + account.accountName);
-          console.dir(account.tagHierarchy);
           this.nodes.push(account.tagHierarchy);
         }
         this.tree.treeModel.update();

@@ -1,6 +1,6 @@
 package net.mortalsilence.indiepim.server.comet;
 
-public class UserOnlineStateMessage implements CometMessage {
+public class UserOnlineStateMessage implements PushMessage {
 
 	private Long userId;
     private Boolean online;

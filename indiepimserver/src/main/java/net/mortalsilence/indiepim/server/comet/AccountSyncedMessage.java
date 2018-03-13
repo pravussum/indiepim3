@@ -1,9 +1,8 @@
 package net.mortalsilence.indiepim.server.comet;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class AccountSyncedMessage implements CometMessage {
+public class AccountSyncedMessage implements PushMessage {
 
 	private Long userId;
 	private Long accountId;

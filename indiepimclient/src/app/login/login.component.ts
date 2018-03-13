@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
     if(!this.user) {
       console.log("Loading current user from local storage");
       this.user = localStorage.getItem('currentUser');
+      console.log("User found in local storage:");
+      console.dir(this.user);
     }
   }
 

@@ -29,7 +29,6 @@ export class AccountsComponent implements OnInit {
   }
 
   addAccount() {
-    console.log("adding account");
     this.accounts.push({
       accountName : "New account",
       encryption: ENCRYPTION_TYPE.SSL,

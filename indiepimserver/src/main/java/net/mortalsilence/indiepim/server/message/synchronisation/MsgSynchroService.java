@@ -2,9 +2,9 @@ package net.mortalsilence.indiepim.server.message.synchronisation;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPFolder.FetchProfileItem;
+import net.mortalsilence.indiepim.server.PushMessageService;
 import net.mortalsilence.indiepim.server.comet.AccountSyncProgressMessage;
 import net.mortalsilence.indiepim.server.comet.AccountSyncedMessage;
-import net.mortalsilence.indiepim.server.comet.CometService;
 import net.mortalsilence.indiepim.server.comet.NewMsgMessage;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.TagDAO;
@@ -36,9 +36,9 @@ public class MsgSynchroService implements MessageConstants {
     private final PersistMessageHandler persistMessageHandler;
     private final UpdateFlagsAndFoldersHandler updateFlagsAndFoldersHandler;
     private final MailAddressHandler mailAddressHandler;
-    private final CometService cometService;
     private final PersistenceHelper persistenceHelper;
     private final NewMessageHandler newMessageHandler;
+    private final PushMessageService pushMessageService;
 
 	@Inject
     public MsgSynchroService(MessageDAO messageDAO,
@@ -47,18 +47,18 @@ public class MsgSynchroService implements MessageConstants {
 							 PersistMessageHandler persistMessageHandler,
 							 UpdateFlagsAndFoldersHandler updateFlagsAndFoldersHandler,
 							 MailAddressHandler mailAddressHandler,
-							 CometService cometService,
 							 PersistenceHelper persistenceHelper,
-							 NewMessageHandler newMessageHandler) {
+							 NewMessageHandler newMessageHandler,
+							 PushMessageService pushMessageService) {
 		this.messageDAO = messageDAO;
 		this.tagDAO = tagDAO;
 		this.connectionUtils = connectionUtils;
 		this.persistMessageHandler = persistMessageHandler;
 		this.updateFlagsAndFoldersHandler = updateFlagsAndFoldersHandler;
 		this.mailAddressHandler = mailAddressHandler;
-		this.cometService = cometService;
 		this.persistenceHelper = persistenceHelper;
 		this.newMessageHandler = newMessageHandler;
+		this.pushMessageService = pushMessageService;
 	}
 
 	public boolean synchronize(	final UserPO user,
@@ -119,7 +119,7 @@ public class MsgSynchroService implements MessageConstants {
 						/* Handle new Messages */
 						@SuppressWarnings("unchecked")
 						final List<Long> newUids = ListUtils.removeAll(remoteUids, knownUids);
-						cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), accountId, folder.getFullName(), newUids.size(), 0));
+						pushMessageService.sendMessage(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), accountId, folder.getFullName(), newUids.size(), 0));
 						if(newUids.size() > 0) {
                             // ignore failed messages
                             newMessages |= newMessageHandler.handleNewMessages(uidMsgMap, newUids, account, folder, tagLineage, updateHandler, persistMessageHandler, mailAddressHandler, session, user, hashCache);
@@ -170,9 +170,9 @@ public class MsgSynchroService implements MessageConstants {
 
 				/* Send Comet messages to clients */
 				if(newMessages) {
-					cometService.sendCometMessages(user.getId(), new NewMsgMessage/*LOL*/(user.getId(), accountId));
+					pushMessageService.sendMessage(user.getId(), new NewMsgMessage/*LOL*/(user.getId(), accountId));
 				}
-				cometService.sendCometMessages(user.getId(), new AccountSyncedMessage(user.getId(), accountId, lastSyncRun));
+				pushMessageService.sendMessage(user.getId(), new AccountSyncedMessage(user.getId(), accountId, lastSyncRun));
 
 				if(logger.isDebugEnabled())
 					logger.debug("Overall sync duration: " + (System.currentTimeMillis() - overallTime) + "ms.");				
@@ -234,8 +234,7 @@ public class MsgSynchroService implements MessageConstants {
 		Map<Long, Message>uidMsgMap = new HashMap<Long, Message>();
 		// TODO change everything to IMAP
 		time = System.currentTimeMillis();
-		for(int i=0; i<messages.length; i++)
-			uidMsgMap.put(folder.getUID(messages[i]), messages[i]);
+		for (Message message : messages) uidMsgMap.put(folder.getUID(message), message);
 		if(logger.isDebugEnabled())
 			logger.debug("Reading UIDs took " + (System.currentTimeMillis() - time) + "ms.");
 		

@@ -2,6 +2,7 @@ package net.mortalsilence.indiepim.server.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.WebSession;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -28,7 +29,6 @@ public class LoginController {
         if(httpServletRequest.getSession() != null) {
             httpServletRequest.getSession().invalidate();
         }
-        httpServletRequest.logout();
     }
 
 //	// TODO write fieldVerifier for ServiceInputs , escapeHTML against XS-Vulnerabilities!

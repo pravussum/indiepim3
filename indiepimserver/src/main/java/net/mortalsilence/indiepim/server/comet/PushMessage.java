@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public interface CometMessage extends Serializable {
+public interface PushMessage extends Serializable {
 
-    @JsonProperty public String getMessageType();
+    @JsonProperty String getMessageType();
 }

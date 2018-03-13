@@ -1,16 +1,11 @@
 package net.mortalsilence.indiepim.server.command.handler;
 
-import net.mortalsilence.indiepim.server.comet.CometService;
+import net.mortalsilence.indiepim.server.PushMessageService;
 import net.mortalsilence.indiepim.server.command.Command;
-import net.mortalsilence.indiepim.server.command.actions.GetTags;
 import net.mortalsilence.indiepim.server.command.actions.GetUsers;
-import net.mortalsilence.indiepim.server.command.results.TagDTOListResult;
 import net.mortalsilence.indiepim.server.command.results.UserDTOListResult;
-import net.mortalsilence.indiepim.server.dao.TagDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
-import net.mortalsilence.indiepim.server.domain.TagPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
-import net.mortalsilence.indiepim.server.utils.TagUtils;
 import net.mortalsilence.indiepim.server.utils.UserUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +17,15 @@ import java.util.Set;
 @Service
 public class GetUsersHandler implements Command<GetUsers, UserDTOListResult> {
 
-    @Inject private UserDAO userDAO;
-    @Inject private CometService cometService;
+    private final UserDAO userDAO;
+    private final PushMessageService pushMessageService;
+
+    @Inject
+    public GetUsersHandler(UserDAO userDAO,
+                           PushMessageService pushMessageService) {
+        this.userDAO = userDAO;
+        this.pushMessageService = pushMessageService;
+    }
 
     @Transactional(readOnly = true)
 	@Override
@@ -32,9 +34,7 @@ public class GetUsersHandler implements Command<GetUsers, UserDTOListResult> {
         final Long userId = ActionUtils.getUserId();
         final Collection<UserPO> userPOs;
         if(action.getOnlineOnly()) {
-            /* get users only, that have/had a browser session running within the last minute */
-            final Set<Long> onlineUserIds = cometService.getOnlineUsers(userId);
-            onlineUserIds.remove(userId); // remove own user id
+            final Set<Long> onlineUserIds = pushMessageService.getOnlineUsers(userId);
             userPOs = userDAO.getUsers(onlineUserIds);
         } else {
             userPOs = userDAO.getUsers();
