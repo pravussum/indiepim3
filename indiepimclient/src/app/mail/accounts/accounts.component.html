@@ -71,13 +71,12 @@
           <input type="number" id="accountSyncInterval" name="accountSyncInterval" [(ngModel)]="selectedAccount.syncInterval" class="form-control"/>
         </p>
         <p *ngIf="selectedAccount.lastSyncRun">
-          <label for="accountLastSync">Last synchronized</label><span id="accountLastSync">{{selectedAccount.lastSyncRun}}</span>
+          <label for="accountLastSync">Last synchronized: </label><span id="accountLastSync">{{selectedAccount.lastSyncRun | date:'short'}}</span>
         </p>
         <div id="syncInfoPanel" *ngIf="selectedAccount.syncActive">
-          <p>Synchronizing...</p><span data-bind="text: syncProgress" ></span><p>
-          <div id="syncProgressBar">{{selectedAccount.syncProgress}}</div>
+          <p>Synchronizing...</p><span>{{selectedAccount.syncProgress}}</span><p>
+          <div id="syncProgressBar">{{selectedAccount.syncProgressValue}}</div>
         </div>
-        <p>{{selectedAccount.lastSyncRun | date:'short'}}</p>
       </div>
     </div>
     <button class="btn btn-danger" (click)="removeAccount()"><i class="fa fa-trash-o mr5"></i>Remove account</button>

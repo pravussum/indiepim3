@@ -29,7 +29,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
                 override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
                     super.handleTextMessage(session, message)
                     println("handling text message $message")
-                    session.sendMessage(TextMessage(message.payload))
                 }
 
                 override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {

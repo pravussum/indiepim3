@@ -9,8 +9,10 @@ import {Router} from "@angular/router";
 export class LoginService {
 
   private loggedInSource = new Subject<string>();
+  private webSocketMsgSource = new Subject<any>();
   private ws : WebSocket;
   loggedInAnnounced$ = this.loggedInSource.asObservable();
+  webSocketMsg$ = this.webSocketMsgSource.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     this.initWebsocket();
@@ -19,7 +21,11 @@ export class LoginService {
   private initWebsocket() {
     console.log("connecting via websocket...");
     this.ws = new WebSocket(window.location.protocol.replace('http', 'ws') + '//' + window.location.host + '/ws/messages');
-    this.ws.onmessage = (msgEvent: MessageEvent) => console.log("websocket message : " + msgEvent.data);
+    this.ws.onmessage = (msgEvent: MessageEvent) => {
+      console.log("websocket message : " + msgEvent.data);
+      this.webSocketMsgSource.next(JSON.parse(msgEvent.data));
+    };
+
     this.ws.onopen = () => {
       console.log("websocket open")
     };

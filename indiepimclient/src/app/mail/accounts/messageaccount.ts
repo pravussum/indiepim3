@@ -29,6 +29,6 @@ export class MessageAccount {
   trustInvalidSSLCertificates?: string;
   version?: string;
   syncProgress?: string;
-  syncProgressValue?: string;
-  syncActive?: string;
+  syncProgressValue?: number;
+  syncActive?: boolean;
 }

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AccountsService} from "./accounts.service";
 import {AUTHENTICATION_TYPE, ENCRYPTION_TYPE, MessageAccount, SYNC_UPDATE_METHOD} from "./messageaccount";
+import {LoginService} from "../../login/login.service";
 
 @Component({
   selector: 'app-accounts',
@@ -18,10 +19,11 @@ export class AccountsComponent implements OnInit {
   authenticationTypes = AUTHENTICATION_TYPE;
   syncMethods = SYNC_UPDATE_METHOD;
 
-  constructor(private accountsService: AccountsService) { }
+  constructor(private accountsService: AccountsService, private loginService: LoginService) { }
 
   ngOnInit() {
       this.accountsService.getAccounts().subscribe(value => this.accounts = value);
+      this.loginService.webSocketMsg$.subscribe(msg => this.onMessage(msg))
   }
 
   onSelect(account: MessageAccount) {
@@ -38,6 +40,22 @@ export class AccountsComponent implements OnInit {
       syncMethod: SYNC_UPDATE_METHOD.FLAGS,
       syncInterval: 5
     });
+  }
+
+  onMessage(msg: any) {
+    if(msg.messageType == "AccountSyncProgress" || msg.messageType == "AccountSynced") {
+      for(let account of this.accounts) {
+        if(account.id == msg.accountId) {
+          if(msg.messageType == "AccountSyncProgress") {
+            account.syncActive = true;
+            account.syncProgress = "Synchronizing folder " + msg.folder + "(" + msg.msgDoneCount + "/" + msg.msgCount + ")";
+            account.syncProgressValue = msg.msgCount == 0 ? 0 : msg.msgDoneCount / msg.msgCount;
+          } else if(msg.messageType == "AccountSynced") {
+            account.syncActive = false
+          }
+        }
+      }
+    }
   }
 
   removeAccount() {
