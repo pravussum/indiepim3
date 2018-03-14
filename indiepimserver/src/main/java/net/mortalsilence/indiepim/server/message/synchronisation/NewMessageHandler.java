@@ -3,7 +3,7 @@ package net.mortalsilence.indiepim.server.message.synchronisation;
 import com.google.common.collect.Lists;
 import com.sun.mail.imap.IMAPFolder;
 import net.mortalsilence.indiepim.server.PushMessageService;
-import net.mortalsilence.indiepim.server.comet.AccountSyncProgressMessage;
+import net.mortalsilence.indiepim.server.pushmessage.AccountSyncProgressMessage;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.TagLineagePO;
 import net.mortalsilence.indiepim.server.domain.UserPO;

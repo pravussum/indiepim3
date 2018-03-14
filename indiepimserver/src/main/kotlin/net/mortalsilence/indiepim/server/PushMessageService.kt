@@ -3,7 +3,7 @@ package net.mortalsilence.indiepim.server
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.SetMultimap
-import net.mortalsilence.indiepim.server.comet.PushMessage
+import net.mortalsilence.indiepim.server.pushmessage.PushMessage
 import org.apache.log4j.Logger
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.TextMessage

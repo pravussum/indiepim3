@@ -1,4 +1,4 @@
-package net.mortalsilence.indiepim.server.comet;
+package net.mortalsilence.indiepim.server.pushmessage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -2,7 +2,7 @@ package net.mortalsilence.indiepim.server.command.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.mortalsilence.indiepim.server.comet.PushMessage;
+import net.mortalsilence.indiepim.server.pushmessage.PushMessage;
 import net.mortalsilence.indiepim.server.command.Result;
 
 import java.util.Collection;

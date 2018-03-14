@@ -1,4 +1,4 @@
-package net.mortalsilence.indiepim.server.comet
+package net.mortalsilence.indiepim.server.pushmessage
 
 data class NewChatMsgMessage (var fromUserId: Long? = null,
                               var fromUserName: String? = null,

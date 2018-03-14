@@ -1,4 +1,4 @@
-package net.mortalsilence.indiepim.server.comet;
+package net.mortalsilence.indiepim.server.pushmessage;
 
 public class AccountSyncProgressMessage implements PushMessage {
 
