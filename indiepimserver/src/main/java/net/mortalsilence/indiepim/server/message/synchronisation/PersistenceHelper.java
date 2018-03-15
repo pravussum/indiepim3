@@ -1,13 +1,13 @@
 package net.mortalsilence.indiepim.server.message.synchronisation;
 
-import net.mortalsilence.indiepim.server.SharedConstants;
-import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
-import net.mortalsilence.indiepim.server.dao.TagDAO;
-import net.mortalsilence.indiepim.server.domain.*;
+import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
+import net.mortalsilence.indiepim.server.domain.MessagePO;
+import net.mortalsilence.indiepim.server.domain.TagLineagePO;
+import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.message.ConnectionUtils;
+import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,10 +18,13 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @Service
-/**
+/*
  * Helper class to fulfill certain task in their own new transaction and comit it immediately
  * without interferring with the surrounding transaction
  * This is primarily useful for persisting single messages in a long running account sync transaction.
@@ -33,10 +36,28 @@ import java.util.*;
  */
 public class PersistenceHelper {
 
-    final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
-    @Inject private MessageUtils messageUtils;
-    @Inject private MessageDAO messageDAO;
-    @Inject private ConnectionUtils connectionUtils;
+    private final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
+    private final MessageUtils messageUtils;
+    private final MessageDAO messageDAO;
+    private final ConnectionUtils connectionUtils;
+    private final IncomingMessageHandlerFactory incomingMessageHandlerFactory;
+    private final PersistMessageHandler persistMessageHandler;
+    private final MailAddressHandler mailAddressHandler;
+
+    @Inject
+    public PersistenceHelper(MessageUtils messageUtils,
+                             MessageDAO messageDAO,
+                             ConnectionUtils connectionUtils,
+                             IncomingMessageHandlerFactory incomingMessageHandlerFactory,
+                             PersistMessageHandler persistMessageHandler,
+                             MailAddressHandler mailAddressHandler) {
+        this.messageUtils = messageUtils;
+        this.messageDAO = messageDAO;
+        this.connectionUtils = connectionUtils;
+        this.incomingMessageHandlerFactory = incomingMessageHandlerFactory;
+        this.persistMessageHandler = persistMessageHandler;
+        this.mailAddressHandler = mailAddressHandler;
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     /* made public for transactional annotation to work */
@@ -44,14 +65,12 @@ public class PersistenceHelper {
     public boolean persistMessage(final MessageAccountPO account,
                                   final Folder folder,
                                   final TagLineagePO tagLineage,
-                                  final IncomingMessageHandler updateHandler,
-                                  final IncomingMessageHandler persistHandler,
-                                  final IncomingMessageHandler addressHandler,
                                   final Session session,
                                   final UserPO user,
                                   final Long msgUid,
                                   final Message message,
-                                  final Set<String> hashCache) {
+                                  final Set<String> hashCache,
+                                  SyncUpdateMethod updateMode) {
         boolean isNew = false;
         try {
             if(logger.isInfoEnabled())
@@ -70,14 +89,15 @@ public class PersistenceHelper {
                     messageDAO.addTagLineage(duplicate, tagLineage, msgUid);
                 }
                 // TODO: replace by something cool
+                IncomingMessageHandler updateHandler = incomingMessageHandlerFactory.getIncomingMessageHandler(updateMode);
                 if(updateHandler != null)
                     duplicate = updateHandler.handleMessage(message, duplicate, msgUid, account, folder, tagLineage, session, user);
             } else {
                 /* handle new messages */
                 MessagePO newMessage = new MessagePO();
                 newMessage.setHash(hash);
-                newMessage = persistHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
-                newMessage = addressHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
+                newMessage = persistMessageHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
+                newMessage = mailAddressHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
                 isNew = true;
             }
             hashCache.add(hash);
@@ -98,14 +118,10 @@ public class PersistenceHelper {
      * Otherwise, DB locks would be held for the newly created rows which would cause a deadlock during message
      * persistence, since these transactions are completely independent and the outer transaction (holding the lock)
      * is suspended in the meanwhile.
-     * @param user
-     * @param account
-     * @param folder
-     * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public TagLineagePO getOrCreateTagLineage(final UserPO user, final MessageAccountPO account, final Folder folder) {
-   		return connectionUtils.getOrCreateTagLineage(user, account, folder);
+    public TagLineagePO getOrCreateTagLineage(final MessageAccountPO account, String folderFullName, char folderSeparator) {
+   		return connectionUtils.getOrCreateTagLineage(account, folderFullName, folderSeparator);
    	}
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -126,11 +142,11 @@ public class PersistenceHelper {
         return messageDAO.deleteMessagesForTagLineage(userId, msgIds, tagLineageId);
     }
 
-    private MessagePO getDuplicate(final MessageAccountPO account, final String hash) throws MessagingException {
+    private MessagePO getDuplicate(final MessageAccountPO account, final String hash)  {
    		return messageDAO.getMessageFromHash(account.getUser().getId(), account.getId(), hash);
    	}
 
-   	private Boolean hasDuplicate(final MessageAccountPO account, final String hash) throws MessagingException {
+   	private Boolean hasDuplicate(final MessageAccountPO account, final String hash) {
    		return messageDAO.existsMessageWithHash(account.getUser().getId(), account.getId(), hash);
    	}
 

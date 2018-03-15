@@ -42,7 +42,6 @@ class ImapFolderWatchingController(private val connectionUtils: ConnectionUtils,
             override fun messagesRemoved(e: MessageCountEvent?) {
                 logger.info("Received message removed event")
                 pushMessageService.sendMessage(account.user.id, NewMsgMessage(account.user.id, account.id))
-
             }
 
             override fun messagesAdded(e: MessageCountEvent?) {

@@ -11,7 +11,7 @@ import javax.mail.Session;
 
 public interface IncomingMessageHandler {
 
-	public MessagePO handleMessage(Message message,
+	MessagePO handleMessage(Message message,
                                    MessagePO messageObj,
                                    Long msgUid,
                                    MessageAccountPO account,

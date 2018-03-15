@@ -6,7 +6,6 @@ import net.mortalsilence.indiepim.server.dao.TagDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.TagHierarchyPO;
 import net.mortalsilence.indiepim.server.domain.TagLineagePO;
-import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.exception.NotImplementedException;
 import net.mortalsilence.indiepim.server.security.EncryptionService;
 import net.mortalsilence.indiepim.server.utils.ArgUtils;
@@ -212,37 +211,32 @@ public class ConnectionUtils implements MessageConstants {
     }
 
 
-    public TagLineagePO getOrCreateTagLineage(final UserPO user, final MessageAccountPO account, final Folder folder) {
-        final List<String> tags = new LinkedList<String>();
-        try {
-            StringTokenizer st = new StringTokenizer(folder.getFullName(), new Character(folder.getSeparator()).toString());
-            while(st.hasMoreElements()) {
-                tags.add(st.nextToken());
-            }
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error parsing folder name " + folder.getFullName(), e);
-        }
+    public TagLineagePO getOrCreateTagLineage(final MessageAccountPO account, String folderFullName, char folderSeparator) {
 
+        final List<String> tags = new LinkedList<>();
+        StringTokenizer st = new StringTokenizer(folderFullName, Character.toString(folderSeparator));
+        while(st.hasMoreElements()) {
+            tags.add(st.nextToken());
+        }
         if(account.getTagHierarchy() == null) {
-            createTagHierarchy4Account(user, account);
+            createTagHierarchy4Account(account);
         }
 
-        final List<String> partialTagLineageTags = new LinkedList<String>();
+        final List<String> partialTagLineageTags = new LinkedList<>();
         final Iterator<String> tagIt = tags.iterator();
         TagLineagePO tagLineage = null;
         while(tagIt.hasNext()) {
             partialTagLineageTags.add(tagIt.next());
             final String tagLineageStr = StringUtils.join(partialTagLineageTags, SharedConstants.TAG_LINEAGE_SEPARATOR);
-            tagLineage = tagDAO.getOrCreateTagLineage(user, tagLineageStr, account.getTagHierarchy());
+            tagLineage = tagDAO.getOrCreateTagLineage(account.getUser(), tagLineageStr, account.getTagHierarchy());
         }
 
         return tagLineage;
     }
 
-    public void createTagHierarchy4Account(final UserPO user, final MessageAccountPO account) {
+    public void createTagHierarchy4Account(final MessageAccountPO account) {
         TagHierarchyPO tagHierarchy = new TagHierarchyPO();
-        tagHierarchy.setUser(user);
+        tagHierarchy.setUser(account.getUser());
         tagHierarchy.setName(account.getTag().getTag());
         genericDAO.persist(tagHierarchy);
         account.setTagHierarchy(tagHierarchy);

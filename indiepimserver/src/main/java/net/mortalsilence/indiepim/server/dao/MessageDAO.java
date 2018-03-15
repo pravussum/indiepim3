@@ -334,7 +334,7 @@ public class MessageDAO {
 		}
 	}
 	
-	public Map<Long, Boolean> getMsgUidFlagMapForTagLineage(final Long userId, final Long tagLineageId) {
+	public Map<Long, Boolean> getMsgUidToReadFlagMap(final Long userId, final Long tagLineageId) {
 		final Map<Long, Boolean> resultMap = new HashMap<>();
 		@SuppressWarnings("unchecked")
 		List<Object[]> l = em.createQuery("select map.msgUid, m.read from MessageTagLineageMappingPO map join map.message m where m.user.id = ?1 and map.tagLineage.id = ?2")

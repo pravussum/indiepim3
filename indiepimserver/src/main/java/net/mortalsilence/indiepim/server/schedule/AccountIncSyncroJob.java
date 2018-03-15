@@ -6,7 +6,7 @@ import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
-import net.mortalsilence.indiepim.server.message.synchronisation.MsgSynchroService;
+import net.mortalsilence.indiepim.server.message.synchronisation.MsgAccountSynchroService;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -25,7 +25,7 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
     @Inject
     private MessageDAO messageDAO;
     @Inject
-    private MsgSynchroService msgSynchroService;
+    private MsgAccountSynchroService msgAccountSynchroService;
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     /**
@@ -49,10 +49,10 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
         try {
             if(account.getMessageAccountStats() != null && account.getMessageAccountStats().getLastSyncRun() != null) {
                 logger.info("Starting account synchronisation for user " + user.getUserName() + ", account " + account.getName() + ".");
-                msgSynchroService.synchronize(user, account, account.getSyncMethod());
+                msgAccountSynchroService.synchronize(user, account, account.getSyncMethod());
             } else {
                 logger.info("Starting very first account synchronisation for user " + user.getUserName() + ", account " + account.getName());
-                msgSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
+                msgAccountSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
             }
         } catch (Exception e) {
             logger.error(e);

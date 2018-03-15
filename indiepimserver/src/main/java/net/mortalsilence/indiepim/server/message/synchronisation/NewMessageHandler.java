@@ -3,10 +3,10 @@ package net.mortalsilence.indiepim.server.message.synchronisation;
 import com.google.common.collect.Lists;
 import com.sun.mail.imap.IMAPFolder;
 import net.mortalsilence.indiepim.server.PushMessageService;
+import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
 import net.mortalsilence.indiepim.server.pushmessage.AccountSyncProgressMessage;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.TagLineagePO;
-import net.mortalsilence.indiepim.server.domain.UserPO;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +39,9 @@ public class NewMessageHandler {
                                      MessageAccountPO account,
                                      final IMAPFolder folder,
                                      TagLineagePO tagLineage,
-                                     IncomingMessageHandler updateHandler,
-                                     IncomingMessageHandler persistHandler,
-                                     IncomingMessageHandler addressHandler,
                                      Session session,
-                                     UserPO user, Set<String> hashCache) {
+                                     Set<String> hashCache,
+                                     SyncUpdateMethod updateMode) {
 
         boolean newMessages = false;
         long cometEventTime = System.currentTimeMillis();
@@ -66,7 +64,8 @@ public class NewMessageHandler {
                 /* Update clients every second */
                 i++;
                 if (System.currentTimeMillis() - cometEventTime > 1000) {
-                    pushMessageService.sendMessage(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
+                    pushMessageService.sendMessage(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(),
+                            folder.getFullName(), uids.size(), i));
                     cometEventTime = System.currentTimeMillis();
                 }
                 final Message message = uidMsgMap.get(anUidSubList);
@@ -75,14 +74,11 @@ public class NewMessageHandler {
                     newMessages |= persistenceHelper.persistMessage(account,
                             folder,
                             tagLineage,
-                            updateHandler,
-                            persistHandler,
-                            addressHandler,
                             session,
-                            user,
+                            account.getUser(),
                             anUidSubList,
                             message,
-                            hashCache);
+                            hashCache, updateMode);
                 } catch (Exception e) {
                     // log and do not fail the whole sync because of one invalid message
                     logger.error("Persisting message " + anUidSubList + " in folder " + folder.getName() + " failed.", e);
