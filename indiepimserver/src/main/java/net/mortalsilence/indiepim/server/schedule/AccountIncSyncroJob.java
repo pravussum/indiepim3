@@ -20,11 +20,12 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
 
 	private final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
-    @Inject
+	// use field injection since quartz is autowired by AutowiringSpringBeanFactory after creation
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection") @Inject
     private UserDAO userDAO;
-    @Inject
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection") @Inject
     private MessageDAO messageDAO;
-    @Inject
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection") @Inject
     private MsgAccountSynchroService msgAccountSynchroService;
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)

@@ -34,4 +34,8 @@ export class AccounttreeComponent implements OnInit {
   onActivate($event) {
     this.router.navigate((['frontend/maillist/taglineage/' + $event.node.id]));
   }
+
+  compose() {
+    this.router.navigate((['frontend/compose']));
+  }
 }

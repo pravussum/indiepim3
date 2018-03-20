@@ -90,6 +90,7 @@ constructor(private val messageDAO: MessageDAO, private val tagDAO: TagDAO,
         val knownUids = tagDAO.getAllMsgUidsForTagLineage(account.user.id, tagLineage.id)
 
         /* Handle new Messages */
+        // TODO really slow
         val newUids = ListUtils.removeAll(remoteUids, knownUids)
         val updatedUids = CollectionUtils.intersection(remoteUids, knownUids)
         val deleteUids = ListUtils.removeAll(knownUids, remoteUids) /* CollectionUtils.removeAll seems to be buggy (calls wrong ListUtils method) */

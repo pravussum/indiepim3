@@ -19,6 +19,8 @@ import { MailviewComponent } from './mail/mailview/mailview.component';
 import {SafePipe} from "./pipes/safe.pipe";
 import { AccounttreeComponent } from './mail/accounttree/accounttree.component';
 import {TreeModule} from "angular-tree-component";
+import { ComposeComponent } from './mail/compose/compose.component';
+import {CKEditorModule} from 'ng2-ckeditor';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -43,7 +45,8 @@ export class XhrInterceptor implements HttpInterceptor {
     SmartDatePipe,
     SafePipe,
     MailviewComponent,
-    AccounttreeComponent
+    AccounttreeComponent,
+    ComposeComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ export class XhrInterceptor implements HttpInterceptor {
     FormsModule,
     HttpClientModule,
     RouterModule,
-    TreeModule
+    TreeModule,
+    CKEditorModule
   ],
   providers: [
     LoginService,

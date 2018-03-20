@@ -1,5 +1,6 @@
 package net.mortalsilence.indiepim.server.spring;
 
+import org.jetbrains.annotations.NotNull;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -23,6 +24,7 @@ public final class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory i
         beanFactory = context.getAutowireCapableBeanFactory();
     }
 
+    @NotNull
     @Override
     protected Object createJobInstance(final TriggerFiredBundle bundle) throws Exception {
         final Object job = super.createJobInstance(bundle);
