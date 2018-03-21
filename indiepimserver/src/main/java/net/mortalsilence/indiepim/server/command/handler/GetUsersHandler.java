@@ -31,7 +31,7 @@ public class GetUsersHandler implements Command<GetUsers, UserDTOListResult> {
 	@Override
     public UserDTOListResult execute(GetUsers action) {
 
-        final Long userId = ActionUtils.getUserId();
+        final Long userId = ActionUtils.getUserIdDeprecated();
         final Collection<UserPO> userPOs;
         if(action.getOnlineOnly()) {
             final Set<Long> onlineUserIds = pushMessageService.getOnlineUsers(userId);

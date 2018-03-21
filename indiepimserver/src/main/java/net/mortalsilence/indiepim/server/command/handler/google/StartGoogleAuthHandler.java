@@ -37,7 +37,7 @@ public class StartGoogleAuthHandler implements Command<StartGoogleAuth, StringRe
     @Transactional
 	@Override
     public StringResult execute(StartGoogleAuth action) {
-		final Long userId = ActionUtils.getUserId();
+		final Long userId = ActionUtils.getUserIdDeprecated();
 
 		final String clientId = action.getClientId();
 		final String clientSecret = action.getClientSecret();

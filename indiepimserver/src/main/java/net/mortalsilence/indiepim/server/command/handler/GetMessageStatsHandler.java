@@ -22,7 +22,7 @@ public class GetMessageStatsHandler implements Command<GetMessageStats, MessageS
     public MessageStatsResult execute(GetMessageStats action) {
 		
 		if(GetMessageStats.STATS_TYPE.COUNT_LAST_TEN_DAYS == action.getStatsType()) {
-            List<Long> result = messageDAO.getMsgCountForLastTenDays(ActionUtils.getUserId());
+            List<Long> result = messageDAO.getMsgCountForLastTenDays(ActionUtils.getUserIdDeprecated());
             return new MessageStatsResult(result);
         }
         throw new NotImplementedException("MessageStatsResult");

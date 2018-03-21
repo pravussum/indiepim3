@@ -30,7 +30,7 @@ public class GetGoogleContactGroupsHandler implements Command<GetGoogleContactGr
 	@Override
     public GoogleContactGroupDTOListResult execute(GetGoogleContactGroups action) {
 	
-		final Long userId = ActionUtils.getUserId();
+		final Long userId = ActionUtils.getUserIdDeprecated();
 		
 		final String clientId = configDAO.getUserPropertyValue(userId, UserConfigKey.GOOGLE_AUTH_CLIENT_ID);
 		final String clientSecret = configDAO.getUserPropertyValue(userId, UserConfigKey.GOOGLE_AUTH_CLIENT_SECRET);

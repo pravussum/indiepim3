@@ -28,7 +28,7 @@ public class GetMessageHandler implements Command<GetMessage, MessageDTOResult> 
     public MessageDTOResult execute(GetMessage action) throws CommandException {
 		final Long messageId = action.getMessageId();
 		try {
-            final MessagePO message = messageDAO.getMessageByIdAndUser(messageId, ActionUtils.getUserId());
+            final MessagePO message = messageDAO.getMessageByIdAndUser(messageId, ActionUtils.getUserIdDeprecated());
             final MessageDTO messageDTO = messageUtils.mapMessagePOtoMessageDTO(message);
             return new MessageDTOResult(messageDTO);
         } catch (NoResultException nre) {

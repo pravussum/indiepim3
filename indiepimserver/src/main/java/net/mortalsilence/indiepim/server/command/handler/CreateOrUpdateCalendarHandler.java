@@ -45,7 +45,7 @@ public class CreateOrUpdateCalendarHandler implements Command<CreateOrUpdateCale
     public IdResult execute(CreateOrUpdateCalendar action) {
 
 		final CalendarDTO calendarDTO = action.getCalendarDTO();
-		final Long userId  = ActionUtils.getUserId();
+		final Long userId  = ActionUtils.getUserIdDeprecated();
         final UserPO user = userDAO.getUser(userId);
 
         CalendarPO calendarPO;

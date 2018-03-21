@@ -42,7 +42,7 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
     public IdVersionResult execute(CreateOrUpdateMessageAccount action) {
 
 		final MessageAccountDTO account = action.getAccount();
-		final Long userId  = ActionUtils.getUserId();
+		final Long userId  = ActionUtils.getUserIdDeprecated();
         final UserPO user = userDAO.getUser(userId);
 		MessageAccountPO accountPO;
 		if(account.id != null) {

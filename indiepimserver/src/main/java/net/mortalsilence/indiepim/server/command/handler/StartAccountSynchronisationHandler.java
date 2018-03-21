@@ -33,7 +33,7 @@ public class StartAccountSynchronisationHandler implements Command<StartAccountS
 	@Override
     public BooleanResult execute(StartAccountSynchronisation action) {
 		
-		final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+		final UserPO user = userDAO.getUser(ActionUtils.getUserIdDeprecated());
 		final MessageAccountPO account = messageDAO.getMessageAccount(user.getId(), action.getAccountId());
         final JobKey jobKey = jobKey("AccountIncSyncroJob", "user_" + account.getUser().getId() + "_account_" + account.getId());
             JobDetail syncJob;

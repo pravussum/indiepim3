@@ -25,7 +25,7 @@ public class GetContactsHandler implements Command<GetContacts, ContactListResul
 	@Transactional (readOnly = true)
     @Override
     public ContactListResult execute(GetContacts action) {
-		final Long userId = ActionUtils.getUserId();
+		final Long userId = ActionUtils.getUserIdDeprecated();
 		final List<ContactPO> contacts;
 		Long count;
 		final Long start = Calendar.getInstance().getTimeInMillis();

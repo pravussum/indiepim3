@@ -5,6 +5,7 @@ import {AccountsComponent} from "./mail/accounts/accounts.component";
 import {MaillistComponent} from "./mail/maillist/maillist.component";
 import {MailviewComponent} from "./mail/mailview/mailview.component";
 import {ComposeComponent} from "./mail/compose/compose.component";
+import {UsersettingsComponent} from "./user/usersettings/usersettings.component";
 
 const routes: Routes = [
   {path: 'frontend/login', component: LoginComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'frontend/maillist/read/:readFlag', component: MaillistComponent},
   {path: 'frontend/mailview/:id', component: MailviewComponent},
   {path: 'frontend/mailaccounts', component: AccountsComponent},
+  {path: 'frontend/user/settings', component: UsersettingsComponent},
   {path: 'frontend/compose', component: ComposeComponent}
 ];
 

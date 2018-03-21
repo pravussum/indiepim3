@@ -1,8 +1,5 @@
 package net.mortalsilence.indiepim.server.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mortalsilence.indiepim.server.calendar.synchronisation.CalSynchroService;
 import net.mortalsilence.indiepim.server.controller.dto.GetMessageRequest;
 import net.mortalsilence.indiepim.server.dto.*;
@@ -18,14 +15,11 @@ import net.mortalsilence.indiepim.server.domain.*;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.utils.CalendarUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.*;
@@ -69,7 +63,7 @@ public class CommandController {
     @Inject private DeleteCalendarHandler deleteCalendarHandler;
     @Inject private CreateOrUpdateEventHandler createOrUpdateEventHandler;
     @Inject private DeleteEventHandler deleteEventHandler;
-
+    @Inject private ActionUtils actionUtils;
 
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -111,7 +105,7 @@ public class CommandController {
     @ResponseBody
     public List<MessageDTO> markMessageRead(@PathVariable(value = "messageId") final Long messageId,
                                   @RequestParam(value = "read", required = false) final Boolean readFlag) {
-        final List<Long> ids = new LinkedList<Long>();
+        final List<Long> ids = new LinkedList<>();
         final Boolean read = readFlag != null ? readFlag : Boolean.TRUE;
         ids.add(messageId);
         final MessageDTOListResult result = markReadHandler.execute(new MarkMessagesAsRead(ids, read));
@@ -159,7 +153,7 @@ public class CommandController {
     @RequestMapping(value="importics", consumes = "multipart/form-data", produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String importIcs(@RequestParam("file") CommonsMultipartFile upload) {
-        final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+        final UserPO user = userDAO.getUser(actionUtils.getUserId());
         try {
             final CalendarPO newCalendar = icsParser.updateCalFromIcalInputStream(user, null, upload.getInputStream(), upload.getName());
             int imported = newCalendar.getEvents().size();
@@ -184,7 +178,7 @@ public class CommandController {
             is = attachment.getInputStream();
             IOUtils.copy(is, os);
             final AttachmentPO attachmentPO = new AttachmentPO();
-            final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+            final UserPO user = userDAO.getUser(actionUtils.getUserId());
             final MessagePO msg = messageDAO.getMessageByIdAndUser(messageId, user.getId());
             if(msg == null)
                 throw new IllegalArgumentException("Message with id " + messageId + " not found.");
@@ -198,10 +192,10 @@ public class CommandController {
             e.printStackTrace();
         } finally {
             if(is != null) {
-                try { is.close();} catch(IOException ioe) {};
+                try { is.close();} catch(IOException ignored) {}
             }
             if(os != null) {
-                try {os.close();} catch(IOException ioe) {};
+                try {os.close();} catch(IOException ignored) {}
             }
         }
         return "{\"result\":\"OK\"}";
@@ -216,7 +210,7 @@ public class CommandController {
     @RequestMapping(value="getCalendar/{id}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object getCalendars(@PathVariable("id") final Long calendarId) {
-        final Collection<Long> calIds = new LinkedList<Long>();
+        final Collection<Long> calIds = new LinkedList<>();
         calIds.add(calendarId);
         List<CalendarDTO> calendars = getCalendarsHandler.execute(new GetCalendars(calIds)).getCalendars();
         if(calendars == null || calendars.isEmpty())
@@ -228,7 +222,7 @@ public class CommandController {
     @RequestMapping(value="syncCalendar/{id}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object syncCalendar(@PathVariable("id") final Long calendarId){
-        final CalendarPO cal = calendarDAO.getCalendarById(ActionUtils.getUserId(), calendarId);
+        final CalendarPO cal = calendarDAO.getCalendarById(actionUtils.getUserId(), calendarId);
         if(cal == null)  {
             throw new RuntimeException("Calendar with id " + calendarId + " not found.");
         }
@@ -271,7 +265,7 @@ public class CommandController {
     public Object getEvents(@RequestParam("start") final Long start,
                             @RequestParam("end") final Long end) {
 
-        final List<EventPO> events = calendarDAO.getEvents(ActionUtils.getUserId(), new Timestamp(start), new Timestamp(end));
+        final List<EventPO> events = calendarDAO.getEvents(actionUtils.getUserId(), new Timestamp(start), new Timestamp(end));
         if(events == null)
             return null;
          return calUtils.mapEventPO2EventDTOList(events);
@@ -326,7 +320,7 @@ public class CommandController {
     @RequestMapping(value="deleteMessage/{id}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object deleteMessage(@PathVariable(value = "id") final Long msgId) {
-        final List<Long> msgIds = new LinkedList<Long>();
+        final List<Long> msgIds = new LinkedList<>();
         msgIds.add(msgId);
         return deleteMessagesHandler.execute(new DeleteMessages(msgIds));
     }
@@ -335,7 +329,7 @@ public class CommandController {
     @ResponseBody
     public void getAttachment(@PathVariable(value = "id") final Long attachmentId, HttpServletResponse response) throws CommandException {
         try {
-            final AttachmentPO attachment = messageDAO.getAttachmentById(attachmentId, ActionUtils.getUserId());
+            final AttachmentPO attachment = messageDAO.getAttachmentById(attachmentId, actionUtils.getUserId());
             // TODO make the following line configurable. Leaving it out it makes the browser opening it directly (no download dialog),
             // but the filename information will be lost.
             response.setHeader("Content-Disposition", "attachment;filename=\"" + attachment.getFilename() + "\"");

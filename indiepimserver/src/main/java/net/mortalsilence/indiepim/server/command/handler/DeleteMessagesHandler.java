@@ -42,7 +42,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
     @Transactional
     public DeleteMessagesResult execute(DeleteMessages action) {
 		final List<Long> messageIds = action.getMessageIds();
-        final Long userId = ActionUtils.getUserId();
+        final Long userId = ActionUtils.getUserIdDeprecated();
         final List<MessagePO> messages = messageDAO.getMessagesByIdAndUser(messageIds, userId, true);
 		// TODO refactor result to handle multiple tag lineages per message
         final Map<Long, DeleteResultInfo> result = new HashMap<>();

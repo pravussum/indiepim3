@@ -27,7 +27,7 @@ public class GetAllMessagesHandler implements Command<GetMessages, MessageListRe
     @Transactional (readOnly = true)
 	@Override
     public MessageListResult execute(GetMessages action) {
-		final Long userId = ActionUtils.getUserId();
+		final Long userId = ActionUtils.getUserIdDeprecated();
 		final List<MessagePO> messages;
 		Long count;
 		final Long start = Calendar.getInstance().getTimeInMillis();
@@ -43,18 +43,18 @@ public class GetAllMessagesHandler implements Command<GetMessages, MessageListRe
 			count = messageDAO.getMessagesForTagLineageTotalCount(userId, action.getTagLineageId());
 		}
 		else if (action.getTagName() != null && !"".equals(action.getTagName())) {
-			messages = messageDAO.getMessagesForTag(ActionUtils.getUserId(), action.getTagName(), action.getOffset(), action.getPageSize());
+			messages = messageDAO.getMessagesForTag(ActionUtils.getUserIdDeprecated(), action.getTagName(), action.getOffset(), action.getPageSize());
 			queryTime = Calendar.getInstance().getTimeInMillis();
 			count = messageDAO.getMessagesForTagTotalCount(userId, action.getTagName());
 		}
 		else if(action.getSearchTerm() != null && !"".equals(action.getSearchTerm())) {
             // TODO check input parameters !!!
-            messages = messageDAO.searchForMessages(ActionUtils.getUserId(), action.getSearchTerm(), action.getOffset(), action.getPageSize());
+            messages = messageDAO.searchForMessages(ActionUtils.getUserIdDeprecated(), action.getSearchTerm(), action.getOffset(), action.getPageSize());
             queryTime = Calendar.getInstance().getTimeInMillis();
             count = messageDAO.searchForMessagesTotalCount(userId, action.getSearchTerm());
 
 		} else if(action.getRead() != null) {
-            messages = messageDAO.getMessagesByReadFlag(ActionUtils.getUserId(), action.getRead(), action.getOffset(), action.getPageSize());
+            messages = messageDAO.getMessagesByReadFlag(ActionUtils.getUserIdDeprecated(), action.getRead(), action.getOffset(), action.getPageSize());
             queryTime = Calendar.getInstance().getTimeInMillis();
             count = messageDAO.getMessagesByReadFlagTotalCount(userId, action.getRead());
         }

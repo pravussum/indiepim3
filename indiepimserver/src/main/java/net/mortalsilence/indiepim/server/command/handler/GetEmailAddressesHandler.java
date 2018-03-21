@@ -22,7 +22,7 @@ public class GetEmailAddressesHandler implements Command<GetEmailAddresses, Emai
 	@Transactional (readOnly = true)
     @Override
     public EmailAddressListResult execute(GetEmailAddresses action) {
-		final Long userId = ActionUtils.getUserId();
+		final Long userId = ActionUtils.getUserIdDeprecated();
         final List<EmailAddressDTO> emailAddressDTOs;
 
         if(action.getQuery() != null && !"".equals(action.getQuery()))

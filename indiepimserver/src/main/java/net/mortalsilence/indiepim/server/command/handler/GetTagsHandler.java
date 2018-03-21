@@ -29,11 +29,11 @@ public class GetTagsHandler implements Command<GetTags, TagDTOListResult> {
     public TagDTOListResult execute(GetTags action) {
         final Collection<TagPO> tags;
         if(action.getTagLineageId() != null) {
-			 tags = tagDAO.getAllTagsForTagLineage(ActionUtils.getUserId(), action.getTagLineageId());
+			 tags = tagDAO.getAllTagsForTagLineage(ActionUtils.getUserIdDeprecated(), action.getTagLineageId());
         } else if(action.getQuery() != null) {
-            tags = tagDAO.searchForTags(ActionUtils.getUserId(), action.getQuery());
+            tags = tagDAO.searchForTags(ActionUtils.getUserIdDeprecated(), action.getQuery());
         } else {
-            tags = tagDAO.getAllTags(ActionUtils.getUserId());
+            tags = tagDAO.getAllTags(ActionUtils.getUserIdDeprecated());
         }
         return new TagDTOListResult(tagUtils.mapTagPO2TagDTOList(tags));
 	}

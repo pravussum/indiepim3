@@ -36,13 +36,13 @@ public class CreateDraftHandler implements Command<CreateDraft, CreateDraftResul
 	@Transactional (readOnly = false)
     @Override
     public CreateDraftResult execute(CreateDraft action) throws CommandException {
-        final UserPO user = userDAO.getUser(ActionUtils.getUserId());
-            final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserId());
+        final UserPO user = userDAO.getUser(ActionUtils.getUserIdDeprecated());
+            final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserIdDeprecated());
             final CreateDraftResult result = new CreateDraftResult();
 
             if(accounts == null || accounts.isEmpty())
                 throw new UserRuntimeException("No message accounts configured. You must create a message account first.");
-            MessagePO draft = messageDAO.getDraft(ActionUtils.getUserId(), action.getOrigMessageId());
+            MessagePO draft = messageDAO.getDraft(ActionUtils.getUserIdDeprecated(), action.getOrigMessageId());
 
             if(draft == null) {
                 if(logger.isDebugEnabled())
@@ -60,11 +60,11 @@ public class CreateDraftHandler implements Command<CreateDraft, CreateDraftResul
 
             result.id = draft.getId();
             if(action.getOrigMessageId() != null) {
-                final MessagePO origMessage = messageDAO.getMessageByIdAndUser(action.getOrigMessageId(), ActionUtils.getUserId());
+                final MessagePO origMessage = messageDAO.getMessageByIdAndUser(action.getOrigMessageId(), ActionUtils.getUserIdDeprecated());
                 final MessageDTO origMessageDTO = messageUtils.mapMessagePOtoMessageDTO(origMessage);
                 if(logger.isDebugEnabled())
                     logger.debug("Found original message with id " + origMessage.getId());
-                draft.setRelatedMessage(messageDAO.getMessageByIdAndUser(action.getOrigMessageId(), ActionUtils.getUserId()));
+                draft.setRelatedMessage(messageDAO.getMessageByIdAndUser(action.getOrigMessageId(), ActionUtils.getUserIdDeprecated()));
                 result.origMessage = origMessageDTO;
             }
             return result;

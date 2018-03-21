@@ -29,7 +29,7 @@ public class CreateOrUpdateEventHandler implements Command<CreateOrUpdateEvent, 
     public IdResult execute(CreateOrUpdateEvent action) {
 
 		final EventDTO eventDTO = action.getEventDTO();
-		final Long userId  = ActionUtils.getUserId();
+		final Long userId  = ActionUtils.getUserIdDeprecated();
         final UserPO user = userDAO.getUser(userId);
 
         EventPO eventPO;

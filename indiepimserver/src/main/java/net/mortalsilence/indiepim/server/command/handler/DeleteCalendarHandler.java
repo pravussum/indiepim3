@@ -31,7 +31,7 @@ public class DeleteCalendarHandler implements Command<DeleteCalendar, BooleanRes
     @Override
     public BooleanResult execute(DeleteCalendar action) {
 
-        calendarDAO.deleteCalendar(ActionUtils.getUserId(), action.getCalendarId());
+        calendarDAO.deleteCalendar(ActionUtils.getUserIdDeprecated(), action.getCalendarId());
 
 		/* Delete Sync Job */
 		// Schedule the job with the trigger

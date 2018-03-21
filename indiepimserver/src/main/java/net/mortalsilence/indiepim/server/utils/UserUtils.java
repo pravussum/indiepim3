@@ -19,7 +19,7 @@ public class UserUtils {
     public static Collection<UserDTO> mapUserPOs2UserDTOs(final Collection<UserPO> userPOs) {
 
         final Iterator<UserPO> it = userPOs.iterator();
-        final Collection<UserDTO> result = new LinkedList<UserDTO>();
+        final Collection<UserDTO> result = new LinkedList<>();
         while(it.hasNext()) {
             final UserPO userPO = it.next();
             final UserDTO userDTO = new UserDTO();

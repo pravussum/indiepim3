@@ -42,7 +42,7 @@ public class MarkMessageAsReadHandler implements Command<MarkMessagesAsRead, Mes
     @Override
     public MessageDTOListResult execute(final MarkMessagesAsRead action) {
 		final List<Long> messageIds = action.getMessageIds();
-        final Long userId = ActionUtils.getUserId();
+        final Long userId = ActionUtils.getUserIdDeprecated();
         final List<MessagePO> messages = messageDAO.getMessagesByIdAndUser(messageIds, userId, true);
 		final List<MessageDTO> resultList = new LinkedList<MessageDTO>();
 		List<MessagePO> accountMessages = new LinkedList<MessagePO>();

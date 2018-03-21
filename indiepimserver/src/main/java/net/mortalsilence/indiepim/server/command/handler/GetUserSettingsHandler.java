@@ -21,7 +21,7 @@ public class GetUserSettingsHandler implements Command<GetUserSettings, UserSett
     public UserSettingsResult execute(GetUserSettings action) {
 	
 		UserSettingsResult result = new UserSettingsResult();
-        final Long userId = ActionUtils.getUserId();
+        final Long userId = ActionUtils.getUserIdDeprecated();
         result.setGoogleAuthClientId(configDAO.getUserPropertyValue(userId, UserConfigKey.GOOGLE_AUTH_CLIENT_ID));
 		result.setGoogleAuthClientSecret(configDAO.getUserPropertyValue(userId, UserConfigKey.GOOGLE_AUTH_CLIENT_SECRET));
 		return result;

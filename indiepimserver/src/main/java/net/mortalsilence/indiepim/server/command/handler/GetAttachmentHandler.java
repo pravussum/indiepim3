@@ -34,7 +34,7 @@ public class GetAttachmentHandler implements Command<GetAttachment, BooleanResul
     @Override
     public BooleanResult execute(final GetAttachment action) throws CommandException {
 
-        final Long userId = ActionUtils.getUserId();
+        final Long userId = ActionUtils.getUserIdDeprecated();
         if(action.getAttachmentId() == null)
             throw new IllegalArgumentException("AttachmentId must be set.");
         final AttachmentPO attachment = messageDAO.getAttachmentById(action.getAttachmentId(), userId);

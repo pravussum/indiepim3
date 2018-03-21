@@ -29,7 +29,7 @@ public class DeleteMessageAccountHandler implements Command<DeleteMessageAccount
     @Override
     public BooleanResult execute(DeleteMessageAccount action) {
 
-		MessageAccountPO account = messageDAO.getMessageAccount(ActionUtils.getUserId(), action.getAccountId());
+		MessageAccountPO account = messageDAO.getMessageAccount(ActionUtils.getUserIdDeprecated(), action.getAccountId());
 		// TODO: check if account exists and if it is owned by user
 
 		/* Delete Sync Job */

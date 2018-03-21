@@ -26,7 +26,7 @@ public class GetMessageAccountsHandler implements Command<GetMessageAccounts, Ge
 	@Override
     public GetMessageAccountsResult execute(GetMessageAccounts action) {
 		
-		final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserId());
+		final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserIdDeprecated());
 		
 		final List<MessageAccountDTO> result = new ArrayList<>();
 		

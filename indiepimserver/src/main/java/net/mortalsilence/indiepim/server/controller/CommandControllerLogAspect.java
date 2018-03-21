@@ -10,10 +10,19 @@ import java.util.Calendar;
 @Aspect
 public class CommandControllerLogAspect {
 
-    final static Logger logger = Logger.getLogger("aspectj");
+    private final static Logger logger = Logger.getLogger("aspectj");
 
     @Around("execution(* net.mortalsilence.indiepim.server.controller.CommandController.*(..))")
     public Object commandController(ProceedingJoinPoint pjp) throws Throwable {
+        return measureTimeOfCall(pjp);
+    }
+
+    @Around("execution(* net.mortalsilence.indiepim.server.rest.UserRestService.*(..))")
+    public Object userService(ProceedingJoinPoint pjp) throws Throwable {
+        return measureTimeOfCall(pjp);
+    }
+
+    private Object measureTimeOfCall(ProceedingJoinPoint pjp) throws Throwable {
         final long start = Calendar.getInstance().getTimeInMillis();
         Object ret = pjp.proceed();
         final long duration = Calendar.getInstance().getTimeInMillis() - start;

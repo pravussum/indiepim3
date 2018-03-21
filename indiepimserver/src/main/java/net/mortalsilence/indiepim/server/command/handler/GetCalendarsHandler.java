@@ -24,9 +24,9 @@ public class GetCalendarsHandler implements Command<GetCalendars, GetCalendarsRe
 
         final List<CalendarPO> calendars;
         if(action.getCalendarIds() != null && !action.getCalendarIds().isEmpty()) {
-            calendars = calendarDAO.getCalendars(ActionUtils.getUserId(), action.getCalendarIds());
+            calendars = calendarDAO.getCalendars(ActionUtils.getUserIdDeprecated(), action.getCalendarIds());
         } else {
-            calendars = calendarDAO.getCalendars(ActionUtils.getUserId());
+            calendars = calendarDAO.getCalendars(ActionUtils.getUserIdDeprecated());
         }
 		return new GetCalendarsResult(calendarUtils.mapCalPO2CalDTOList(calendars));
 	}

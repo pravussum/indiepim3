@@ -21,7 +21,7 @@ public class DeleteEventHandler implements Command<DeleteEvent, BooleanResult> {
     @Override
     public BooleanResult execute(DeleteEvent action) {
 
-        calendarDAO.deleteEvent(ActionUtils.getUserId(), action.getEventId());
+        calendarDAO.deleteEvent(ActionUtils.getUserIdDeprecated(), action.getEventId());
 		return new BooleanResult(true);
 	}
 

@@ -11,6 +11,6 @@ import net.mortalsilence.indiepim.server.command.exception.CommandException;
  */
 public interface Command<A extends Action<R>, R extends Result> {
 
-    public R execute(A action) throws CommandException;
-    public void rollback(A action, R result);
+    R execute(A action) throws CommandException;
+    void rollback(A action, R result);
 }

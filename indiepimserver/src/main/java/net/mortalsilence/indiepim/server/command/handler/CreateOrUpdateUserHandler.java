@@ -8,8 +8,7 @@ import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.CalendarPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.dto.UserDTO;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import net.mortalsilence.indiepim.server.service.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -20,11 +19,15 @@ public class CreateOrUpdateUserHandler implements Command<CreateOrUpdateUser, Id
 
     private final UserDAO userDAO;
     private final GenericDAO genericDAO;
+    private final PasswordEncoder passwordEncoder;
 
     @Inject
-    public CreateOrUpdateUserHandler(UserDAO userDAO, GenericDAO genericDAO) {
+    public CreateOrUpdateUserHandler(UserDAO userDAO,
+                                     GenericDAO genericDAO,
+                                     PasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
         this.genericDAO = genericDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -50,8 +53,8 @@ public class CreateOrUpdateUserHandler implements Command<CreateOrUpdateUser, Id
         user.setUserName(userDTO.getUserName());
         // only overwrite password when given. Must always be present for new users (check see above).
         if(userDTO.getPassword() != null) {
-            PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-            user.setPasswordHash(passwordEncoder.encode(userDTO.getPassword()));
+            String passwordHash = passwordEncoder.encodePassword(userDTO.getPassword());
+            user.setPasswordHash(passwordHash);
         }
         user.setAdmin(userDTO.getAdmin() != null ? userDTO.getAdmin() : false);
 
@@ -65,6 +68,8 @@ public class CreateOrUpdateUserHandler implements Command<CreateOrUpdateUser, Id
 
 		return new IdResult(user.getId());
 	}
+
+
 
     private void createInitialUserData(UserPO user) {
         // create an default calendar

@@ -47,7 +47,7 @@ public class ImportGoogleContactGroupHandler implements Command<ImportGoogleCont
     @Override
     public StringResult execute(ImportGoogleContactGroup action) {
 
-        final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+        final UserPO user = userDAO.getUser(ActionUtils.getUserIdDeprecated());
 
 		if(action.getGoogleContactGroupId() == null || "".equals(action.getGoogleContactGroupId()))
 				throw new RuntimeException("Google contact group id is invalid.");

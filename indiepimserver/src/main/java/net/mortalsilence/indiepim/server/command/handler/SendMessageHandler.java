@@ -20,7 +20,7 @@ public class SendMessageHandler implements Command<SendMessage, IdResult> {
 		// TODO validate input
 		return new IdResult(
                 sendService.sendMessage(
-                        ActionUtils.getUserId(),
+                        ActionUtils.getUserIdDeprecated(),
 						action.getAccountId(), 
 						action.getSubject(),
 						action.getReceiver(),

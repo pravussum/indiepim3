@@ -22,6 +22,7 @@ import {TreeModule} from "angular-tree-component";
 import { ComposeComponent } from './mail/compose/compose.component';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {RlTagInputModule} from 'angular2-tag-input';
+import { UsersettingsComponent } from './user/usersettings/usersettings.component';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -47,7 +48,8 @@ export class XhrInterceptor implements HttpInterceptor {
     SafePipe,
     MailviewComponent,
     AccounttreeComponent,
-    ComposeComponent
+    ComposeComponent,
+    UsersettingsComponent
   ],
   imports: [
     BrowserModule,

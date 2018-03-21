@@ -27,7 +27,7 @@ public class SendChatMessageHandler implements Command<SendChatMessage, BooleanR
     @Transactional
 	@Override
     public BooleanResult execute(SendChatMessage action) {
-        final Long myUserId = ActionUtils.getUserId();
+        final Long myUserId = ActionUtils.getUserIdDeprecated();
         final UserPO me = userDAO.getUser(myUserId);
         pushMessageService.sendMessage(action.getUserId(), new NewChatMsgMessage(myUserId, me.getUserName(), action.getMessage()));
         return new BooleanResult(true);
