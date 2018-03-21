@@ -53,7 +53,7 @@
     <logger name="org.quartz" additivity="false" level="INFO">
         <appender-ref ref="QuartzAppender"/>
     </logger>
-    <logger name="org.hibernate.SQL" additivity="false" level="DEBUG">
+    <logger name="org.hibernate.SQL" additivity="false" level="INFO">
         <appender-ref ref="HibernateSQLAppender"/>
     </logger>
     <logger name="aspectj" additivity="false" level="TRACE">

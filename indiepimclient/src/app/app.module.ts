@@ -21,6 +21,7 @@ import { AccounttreeComponent } from './mail/accounttree/accounttree.component';
 import {TreeModule} from "angular-tree-component";
 import { ComposeComponent } from './mail/compose/compose.component';
 import {CKEditorModule} from 'ng2-ckeditor';
+import {RlTagInputModule} from 'angular2-tag-input';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -55,7 +56,8 @@ export class XhrInterceptor implements HttpInterceptor {
     HttpClientModule,
     RouterModule,
     TreeModule,
-    CKEditorModule
+    CKEditorModule,
+    RlTagInputModule
   ],
   providers: [
     LoginService,

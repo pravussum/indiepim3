@@ -4,16 +4,17 @@
       <option *ngFor="let account of accounts " [ngValue]="account">{{account.accountName}}</option>
     </select>
   </div>
-  <div><label for="toBox">To:</label><input id="toBox" [(ngModel)]="message.to" class="form-control"/></div>
-  <div><label for="ccBox">Cc:</label><input id="ccBox"
-                                                                          data-bind="select2: cc,  select2options: select2options"
-                                                                          class="form-control"></div>
-  <div><label for="bccBox">Bcc:</label><input id="bccBox"
-                                                                            data-bind="select2: bcc, select2options: select2options"
-                                                                            class="form-control"/></div>
+  <div>
+    <rl-tag-input id="toBox" [(ngModel)]="message.to" placeholder="recipient"></rl-tag-input>
+  </div>
+  <div>
+    <rl-tag-input id="ccBox" [(ngModel)]="message.cc" placeholder="cc"></rl-tag-input>
+  </div>
+  <div>
+    <rl-tag-input id="bccBox" [(ngModel)]="message.bcc" placeholder="bcc"></rl-tag-input>
+  </div>
   <div><label for="subjectBox">Subject: </label><input type="text" id="subjectBox" [(ngModel)]="message.subject" class="form-control"/></div>
   <ckeditor [(ngModel)]="message.content" debounce="500"></ckeditor>
-
   <button class="btn btn-primary" id="sendButton" (click)="sendMessage()">
     <i class="fa fa-arrow-right mr5"></i>Send
   </button>

@@ -26,6 +26,7 @@ export class ComposeComponent implements OnInit {
         this.selectedAccount = this.accounts[0];
         this.message.accountId = this.selectedAccount.id
         this.message.isHtml = true
+        this.message.to = [];
       }
     });
 
