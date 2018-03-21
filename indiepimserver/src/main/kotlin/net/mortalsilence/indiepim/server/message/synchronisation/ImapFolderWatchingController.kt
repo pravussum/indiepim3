@@ -1,7 +1,7 @@
 package net.mortalsilence.indiepim.server.message.synchronisation
 
 import com.sun.mail.imap.IMAPFolder
-import net.mortalsilence.indiepim.server.PushMessageService
+import net.mortalsilence.indiepim.server.pushmessage.PushMessageService
 import net.mortalsilence.indiepim.server.dao.UserDAO
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO
 import net.mortalsilence.indiepim.server.message.ConnectionUtils

@@ -1,7 +1,7 @@
 package net.mortalsilence.indiepim.server.message.synchronisation;
 
 import com.sun.mail.imap.IMAPFolder;
-import net.mortalsilence.indiepim.server.PushMessageService;
+import net.mortalsilence.indiepim.server.pushmessage.PushMessageService;
 import net.mortalsilence.indiepim.server.pushmessage.AccountSyncedMessage;
 import net.mortalsilence.indiepim.server.pushmessage.NewMsgMessage;
 import net.mortalsilence.indiepim.server.domain.*;

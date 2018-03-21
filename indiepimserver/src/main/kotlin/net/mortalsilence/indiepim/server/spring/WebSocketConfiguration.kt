@@ -1,7 +1,7 @@
-package net.mortalsilence.indiepim.server
+package net.mortalsilence.indiepim.server.spring
 
-import net.mortalsilence.indiepim.server.dao.UserDAO
 import net.mortalsilence.indiepim.server.message.synchronisation.ImapFolderWatchingController
+import net.mortalsilence.indiepim.server.pushmessage.PushMessageService
 import net.mortalsilence.indiepim.server.security.IndieUser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

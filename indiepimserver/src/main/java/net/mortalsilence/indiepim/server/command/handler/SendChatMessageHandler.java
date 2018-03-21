@@ -1,6 +1,6 @@
 package net.mortalsilence.indiepim.server.command.handler;
 
-import net.mortalsilence.indiepim.server.PushMessageService;
+import net.mortalsilence.indiepim.server.pushmessage.PushMessageService;
 import net.mortalsilence.indiepim.server.pushmessage.NewChatMsgMessage;
 import net.mortalsilence.indiepim.server.command.Command;
 import net.mortalsilence.indiepim.server.command.actions.SendChatMessage;
