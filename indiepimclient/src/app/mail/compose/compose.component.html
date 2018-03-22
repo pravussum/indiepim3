@@ -1,26 +1,40 @@
-<div id="wrapper">
-  <div><label for="accountOptions">From:</label>
-    <select id="accountOptions" name="accountOptions" [(ngModel)]="selectedAccount" class="form-control">
-      <option *ngFor="let account of accounts " [ngValue]="account">{{account.accountName}}</option>
-    </select>
+<div class="m30">
+  <div id="wrapper">
+    <div *ngIf="accounts.length > 1">
+      <label for="accountOptions" class="sr-only">from</label>
+      <select id="accountOptions" name="accountOptions" [(ngModel)]="selectedAccount" class="form-control">
+        <option *ngFor="let account of accounts " [ngValue]="account">{{account.accountName}}</option>
+      </select>
+    </div>
+    <div>
+      <rl-tag-input id="toBox" [(ngModel)]="message.to" placeholder="to"
+                    [autocomplete]="true" [autocompleteItems]="addressesStr" [autocompleteMustMatch]="false">
+      </rl-tag-input>
+    </div>
+    <div>
+      <rl-tag-input id="ccBox" [(ngModel)]="message.cc" placeholder="cc"></rl-tag-input>
+    </div>
+    <div class="mb30">
+      <rl-tag-input id="bccBox" [(ngModel)]="message.bcc" placeholder="bcc"></rl-tag-input>
+    </div>
+
+    <div class="mb30">
+      <label for="subjectBox" class="sr-only">Subject:</label>
+      <input type="text" id="subjectBox" placeholder="subject" [(ngModel)]="message.subject" class="form-control"/>
+    </div>
+
+    <div class="mb30">
+      <ckeditor [(ngModel)]="message.content" debounce="500"></ckeditor>
+    </div>
+    <div class="sendButtonPanel">
+      <button class="btn btn-primary" id="sendButton" (click)="sendMessage()">
+        <i class="fa fa-arrow-right mr5"></i>Send
+      </button>
+    </div>
   </div>
-  <div>
-    <rl-tag-input id="toBox" [(ngModel)]="message.to" placeholder="recipient"></rl-tag-input>
+  <div id="attachmentPanel">
+    <h2>Attachments</h2>
+    <input type="file" (change)="fileChange($event)" placeholder="Upload file">
+    <div id="attachmentoverallprogress" style="width:0"></div>
   </div>
-  <div>
-    <rl-tag-input id="ccBox" [(ngModel)]="message.cc" placeholder="cc"></rl-tag-input>
-  </div>
-  <div>
-    <rl-tag-input id="bccBox" [(ngModel)]="message.bcc" placeholder="bcc"></rl-tag-input>
-  </div>
-  <div><label for="subjectBox">Subject: </label><input type="text" id="subjectBox" [(ngModel)]="message.subject" class="form-control"/></div>
-  <ckeditor [(ngModel)]="message.content" debounce="500"></ckeditor>
-  <button class="btn btn-primary" id="sendButton" (click)="sendMessage()">
-    <i class="fa fa-arrow-right mr5"></i>Send
-  </button>
-</div>
-<div id="attachmentPanel">
-  <h3>Attachments</h3>
-  <input id="fileupload" type="file" name="files[]" multiple>
-  <div id="attachmentoverallprogress" style="width:0"></div>
 </div>
