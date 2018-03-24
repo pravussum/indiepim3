@@ -125,8 +125,8 @@ public class MessageUtils implements MessageConstants {
 		if(messageAccountPO.getPassword() != null) {
 			resultAccount.lastSyncRun = messageAccountPO.getMessageAccountStats().getLastSyncRun();
 		}
-		resultAccount.newMessages = messageAccountPO.getNewMessages();
-		resultAccount.trustInvalidSSLCertificates = messageAccountPO.getTrustInvalidSSLCertificates();			
+		resultAccount.newMessages = Boolean.TRUE.equals(messageAccountPO.getNewMessages());
+		resultAccount.trustInvalidSSLCertificates = Boolean.TRUE.equals(messageAccountPO.getTrustInvalidSSLCertificates());
         // do not give the password away! We are only using it in the backend for message account sync.
         // can be overriden but not read from the clients
 		resultAccount.outgoingHost = messageAccountPO.getOutgoingHost();
