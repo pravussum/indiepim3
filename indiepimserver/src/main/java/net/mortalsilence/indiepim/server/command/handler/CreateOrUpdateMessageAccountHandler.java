@@ -16,7 +16,10 @@ import net.mortalsilence.indiepim.server.message.MessageDeleteMethod;
 import net.mortalsilence.indiepim.server.schedule.AccountIncSyncroJob;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
 import org.quartz.DateBuilder.IntervalUnit;
-import org.quartz.*;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -31,18 +34,31 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Named
 public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpdateMessageAccount, IdVersionResult> {
 
-    @Inject private UserDAO userDAO;
-    @Inject private MessageDAO messageDAO;
-    @Inject private GenericDAO genericDAO;
-    @Inject private TagDAO tagDAO;
-    @Inject private MessageUtils messageUtils;
-    @Inject private Scheduler scheduler;
+    private final UserDAO userDAO;
+    private final MessageDAO messageDAO;
+    private final GenericDAO genericDAO;
+    private final TagDAO tagDAO;
+    private final MessageUtils messageUtils;
+    private final Scheduler scheduler;
+    private final ActionUtils actionUtils;
 
-    @Transactional
+	@Inject
+	public CreateOrUpdateMessageAccountHandler(UserDAO userDAO, MessageDAO messageDAO, GenericDAO genericDAO, TagDAO tagDAO,
+											   MessageUtils messageUtils, Scheduler scheduler, ActionUtils actionUtils) {
+		this.userDAO = userDAO;
+		this.messageDAO = messageDAO;
+		this.genericDAO = genericDAO;
+		this.tagDAO = tagDAO;
+		this.messageUtils = messageUtils;
+		this.scheduler = scheduler;
+		this.actionUtils = actionUtils;
+	}
+
+	@Transactional
     public IdVersionResult execute(CreateOrUpdateMessageAccount action) {
 
 		final MessageAccountDTO account = action.getAccount();
-		final Long userId  = ActionUtils.getUserIdDeprecated();
+		final long userId  = actionUtils.getUserId();
         final UserPO user = userDAO.getUser(userId);
 		MessageAccountPO accountPO;
 		if(account.id != null) {

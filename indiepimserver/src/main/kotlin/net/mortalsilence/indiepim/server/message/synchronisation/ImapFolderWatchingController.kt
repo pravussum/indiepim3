@@ -5,6 +5,7 @@ import net.mortalsilence.indiepim.server.pushmessage.PushMessageService
 import net.mortalsilence.indiepim.server.dao.UserDAO
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO
 import net.mortalsilence.indiepim.server.message.ConnectionUtils
+import net.mortalsilence.indiepim.server.pushmessage.BackendErrorPushMessage
 import net.mortalsilence.indiepim.server.pushmessage.NewMsgMessage
 import org.apache.log4j.Logger
 import org.springframework.stereotype.Service
@@ -18,7 +19,7 @@ class ImapFolderWatchingController(private val connectionUtils: ConnectionUtils,
                                    private val pushMessageService: PushMessageService,
                                    private val userDAO: UserDAO) {
 
-    val logger = Logger.getLogger("net.mortalsilence.indiepim")
+    private val logger = Logger.getLogger("net.mortalsilence.indiepim")
 
     private val user2WatchThreadMap = mutableMapOf<Long, Thread>()
 
@@ -28,8 +29,13 @@ class ImapFolderWatchingController(private val connectionUtils: ConnectionUtils,
         if(user2WatchThreadMap.containsKey(user.id)) {
             return
         }
-        user.messageAccounts.forEach {
-            watchMessageAccount(it)
+        user.messageAccounts.forEach { account ->
+            try {
+                watchMessageAccount(account)
+            } catch (e: Exception) {
+                logger.error("Failed to register IMAP folder listener for account ${account.id}...", e)
+                pushMessageService.sendMessage(user.id, BackendErrorPushMessage("Failed to register IMAP new message watcher for account $account.name with error ${e.message}"))
+            }
         }
     }
 
