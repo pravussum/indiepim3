@@ -17,16 +17,22 @@ import java.util.List;
 @Named
 public class GetMessageAccountsHandler implements Command<GetMessageAccounts, GetMessageAccountsResult> {
 
-    @Inject
-    private MessageDAO messageDAO;
-    @Inject
-    private MessageUtils messageUtils;
+    private final MessageDAO messageDAO;
+    private final MessageUtils messageUtils;
+    private final ActionUtils actionUtils;
 
-    @Transactional(readOnly = true)
+	@Inject
+	public GetMessageAccountsHandler(MessageDAO messageDAO, MessageUtils messageUtils, ActionUtils actionUtils) {
+		this.messageDAO = messageDAO;
+		this.messageUtils = messageUtils;
+		this.actionUtils = actionUtils;
+	}
+
+	@Transactional(readOnly = true)
 	@Override
     public GetMessageAccountsResult execute(GetMessageAccounts action) {
 		
-		final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(ActionUtils.getUserIdDeprecated());
+		final List<MessageAccountPO> accounts = messageDAO.getMessageAccounts(actionUtils.getUserId());
 		
 		final List<MessageAccountDTO> result = new ArrayList<>();
 		

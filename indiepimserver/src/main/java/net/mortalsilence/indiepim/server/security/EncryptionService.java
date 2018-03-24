@@ -1,5 +1,6 @@
 package net.mortalsilence.indiepim.server.security;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
@@ -9,6 +10,9 @@ import javax.annotation.PostConstruct;
 import javax.crypto.*;
 import javax.inject.Named;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 import java.security.*;
 import java.security.cert.CertificateException;
 
@@ -88,6 +92,8 @@ public class EncryptionService {
                 if(logger.isInfoEnabled())
                     logger.info("Keystore saved to " + getAbsoluteKeystorePath() + ".");
 
+				Files.setPosixFilePermissions(Paths.get(getAbsoluteKeystorePath()),
+						Sets.newHashSet(PosixFilePermission.OWNER_READ,PosixFilePermission.GROUP_READ));
 			} catch (KeyStoreException e) {
 				e.printStackTrace();
 				throw new RuntimeException("A keystore with type JCEKS could not be instantiated. Java cryptography Extension (JCE) available?");

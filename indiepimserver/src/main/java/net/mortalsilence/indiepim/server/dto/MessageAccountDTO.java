@@ -30,8 +30,8 @@ public class MessageAccountDTO implements Serializable {
 	public SyncUpdateMethod syncMethod;
 	public Integer syncInterval;
 	public Date lastSyncRun;
-	public Boolean newMessages;
-	public Boolean trustInvalidSSLCertificates;
+	public boolean newMessages;
+	public boolean trustInvalidSSLCertificates;
 	public Timestamp version;
 	public String deleteMode;
 }

@@ -38,7 +38,8 @@ export class AccountsComponent implements OnInit {
       authentication: AUTHENTICATION_TYPE.PASSWORD_NORMAL,
       outgoingAuthentication: AUTHENTICATION_TYPE.PASSWORD_NORMAL,
       syncMethod: SYNC_UPDATE_METHOD.FLAGS,
-      syncInterval: 5
+      syncInterval: 5,
+      trustInvalidSSLCertificates : false
     });
   }
 

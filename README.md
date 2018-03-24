@@ -23,7 +23,11 @@ Create a new database for IndiePIM to use, like so:
     
 ## Configure
 * copy indiepim3/indieserver/application.properties to your destination dir
-* adapt it to your needs (database connection and credentials are mandatory)  
+* adapt it to your needs (database connection and credentials are mandatory)
+
+### Keystore
+* TODO
+* choose password before first start, or otherwise you have to change the password with e. g. keystore explorer (or delete it if no message accounts have been created yet)    
 
 ## Run
 
