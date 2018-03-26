@@ -143,14 +143,14 @@ class PersistMessageHandler(private val genericDAO: GenericDAO,
          */
         if (part.isMimeType(MessageConstants.CONTENT_TYPE_TEXT_HTML) && msg.contentHtml == null || part.isMimeType(MessageConstants.CONTENT_TYPE_TEXT_PLAIN) && msg.contentText == null) {
             try {
-                val `is` = part.inputStream
-                val mimeCharset = ContentType(part.contentType).getParameter(MessageConstants.CONTENT_TYPE_PARAM_CHARSET)
+                val inputStream = part.inputStream
+                val mimeCharset: String? = ContentType(part.contentType).getParameter(MessageConstants.CONTENT_TYPE_PARAM_CHARSET)
                 val charset = mimeToJavaCharsetMapper.getJavaCharsetFromMimeCharsetWithFallback(msgUid, mimeCharset)
                 // drop malformed Characters
                 val decoder = charset.newDecoder()
                 decoder.onMalformedInput(CodingErrorAction.IGNORE)
                 decoder.onUnmappableCharacter(CodingErrorAction.IGNORE)
-                val inputReader = InputStreamReader(`is`, decoder)
+                val inputReader = InputStreamReader(inputStream, decoder)
                 if (part.isMimeType(MessageConstants.CONTENT_TYPE_TEXT_PLAIN)) {
                     msg.contentText = IOUtils.toString(inputReader)
                 } else if (part.isMimeType(MessageConstants.CONTENT_TYPE_TEXT_HTML)) {

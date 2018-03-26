@@ -47,7 +47,7 @@ constructor(private val tagDAO: TagDAO, private val genericDAO: GenericDAO,
             store.connect(account.host, account.port!!, account.username, password)
             return store
         } catch (e: MessagingException) {
-            throw RuntimeException("Connecting to message store failed for account $account.id (${account.host}:${account.port})", e)
+            throw RuntimeException("Connecting to message store failed for account ${account.id} (${account.host}:${account.port})", e)
         }
     }
 
@@ -139,7 +139,7 @@ constructor(private val tagDAO: TagDAO, private val genericDAO: GenericDAO,
         return Session.getInstance(props)
     }
 
-    fun getIncomingProtocol(account: MessageAccountPO): String {
+    private fun getIncomingProtocol(account: MessageAccountPO): String {
         if (ArgUtils.empty(account.protocol))
             throw RuntimeException("Protocol for account " + account.name + " is not set.")
         if (MessageConstants.PROTOCOL_IMAP == account.protocol.toUpperCase()) {
@@ -214,7 +214,7 @@ constructor(private val tagDAO: TagDAO, private val genericDAO: GenericDAO,
         return tagLineage
     }
 
-    fun createTagHierarchy4Account(account: MessageAccountPO) {
+    private fun createTagHierarchy4Account(account: MessageAccountPO) {
         val tagHierarchy = TagHierarchyPO()
         tagHierarchy.user = account.user
         tagHierarchy.name = account.tag.tag

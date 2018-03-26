@@ -8,21 +8,22 @@ import javax.mail.internet.MimeUtility
 @Component
 class MimeToJavaCharsetMapper {
 
-    fun getJavaCharsetFromMimeCharsetWithFallback(msgUid: Long?, mimeCharset: String): Charset {
-        var javaCharset: String? = MimeUtility.javaCharset(mimeCharset)
-        if (javaCharset == null) {
-            javaCharset = Charset.defaultCharset().name()
-            logger.warn("No java charset for given MIME charset $mimeCharset (message $msgUid. Using default charset.")
+    fun getJavaCharsetFromMimeCharsetWithFallback(msgUid: Long?, mimeCharset: String?): Charset {
+        if(mimeCharset == null) {
+            return Charset.defaultCharset()
         }
-        var charset: Charset
-        try {
-            charset = Charset.forName(javaCharset!!)
-        } catch (e: UnsupportedCharsetException) {
-            charset = Charset.defaultCharset()
+        val javaCharset: String? = MimeUtility.javaCharset(mimeCharset)
+        if (javaCharset == null) {
             logger.warn("No java charset for given MIME charset $mimeCharset (message $msgUid. Using default charset.")
+            return  Charset.defaultCharset()
+        }
+        try {
+            return Charset.forName(javaCharset)
+        } catch (e: UnsupportedCharsetException) {
+            logger.warn("No java charset for given MIME charset $mimeCharset (message $msgUid. Using default charset.")
+            return Charset.defaultCharset()
         }
 
-        return charset
     }
 
 }

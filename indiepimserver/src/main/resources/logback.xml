@@ -62,7 +62,7 @@
     <logger name="net.mortalsilence.indiepim" additivity="false" level="DEBUG">
         <appender-ref ref="IndiePimAppender"/>
     </logger>
-    <logger name="org.springframework.orm.jpa" additivity="false" level="DEBUG">
+    <logger name="org.springframework.orm.jpa" additivity="false" level="INFO">
         <appender-ref ref="SpringAppender"/>
     </logger>
     <logger name="org.hibernate" additivity="false" level="ERROR">

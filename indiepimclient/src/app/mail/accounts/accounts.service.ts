@@ -21,4 +21,8 @@ export class AccountsService {
     return this.http.post('/api/command/createOrUpdateMessageAccount', account);
   }
 
+  startIncSync(account: MessageAccount) : Observable<any> {
+    return this.http.get('/api/account/' + account.id + "/startIncSync")
+  }
+
 }

@@ -60,10 +60,14 @@ export class AccountsComponent implements OnInit {
   }
 
   removeAccount() {
-    this.accountsService.removeAccount(this.selectedAccount).subscribe(result => console.log(result));
+    this.accountsService.removeAccount(this.selectedAccount).subscribe(data => console.log(data), err => console.error(err));
   }
 
   saveAccount() {
-    this.accountsService.saveAccount(this.selectedAccount).subscribe(result => console.log(result));
+    this.accountsService.saveAccount(this.selectedAccount).subscribe(data => console.log(data), err => console.error(err));
+  }
+
+  startAccountSync() {
+    this.accountsService.startIncSync(this.selectedAccount).subscribe(data => console.log("sync finished."), err => console.error(err));
   }
 }

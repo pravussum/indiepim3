@@ -139,7 +139,6 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
 		try {
 			scheduler.deleteJob(jobKey("AccountIncSyncroJob", "user_" + accountPO.getUser().getId() + "_account_" + accountPO.getId()));
 		} catch (SchedulerException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}			
 	}

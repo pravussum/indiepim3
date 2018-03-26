@@ -4,6 +4,7 @@ import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
+import net.mortalsilence.indiepim.server.message.AccountIncSyncService;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.message.SyncUpdateMethod;
 import net.mortalsilence.indiepim.server.message.synchronisation.MsgAccountSynchroService;
@@ -27,6 +28,8 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
     private MessageDAO messageDAO;
     @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection") @Inject
     private MsgAccountSynchroService msgAccountSynchroService;
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection") @Inject
+    private AccountIncSyncService accountIncSyncService;
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     /**
@@ -47,16 +50,8 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
         final UserPO user = userDAO.getUser(userId);
         final MessageAccountPO account = messageDAO.getMessageAccount(userId, accountId);
 
-        try {
-            if(account.getMessageAccountStats() != null && account.getMessageAccountStats().getLastSyncRun() != null) {
-                logger.info("Starting account synchronisation for user " + user.getUserName() + ", account " + account.getName() + ".");
-                msgAccountSynchroService.synchronize(user, account, account.getSyncMethod());
-            } else {
-                logger.info("Starting very first account synchronisation for user " + user.getUserName() + ", account " + account.getName());
-                msgAccountSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
-            }
-        } catch (Exception e) {
-            logger.error("Account synchronisation failed", e);
-        }
-	}
+        accountIncSyncService.accountIncSync(account);
+    }
+
+
 }

@@ -24,8 +24,7 @@ constructor(private val messageDAO: MessageDAO, private val tagDAO: TagDAO,
             private val pushMessageService: PushMessageService) {
 
     @Throws(MessagingException::class)
-    fun synchronizeFolder(account: MessageAccountPO, updateMode: SyncUpdateMethod,
-                          session: Session, updateHandler: IncomingMessageHandler, folder: IMAPFolder, hashCache: Set<String>): Boolean {
+    fun synchronizeFolder(account: MessageAccountPO, updateMode: SyncUpdateMethod, session: Session, folder: IMAPFolder, hashCache: Set<String>): Boolean {
         try {
             if (folder.type and Folder.HOLDS_MESSAGES == 0) {
                 return false

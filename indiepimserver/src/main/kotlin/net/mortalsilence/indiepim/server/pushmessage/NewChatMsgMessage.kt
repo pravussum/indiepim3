@@ -1,8 +1,8 @@
 package net.mortalsilence.indiepim.server.pushmessage
 
-data class NewChatMsgMessage (private val fromUserId: Long,
-                              private val fromUserName: String,
-                              private val message: String) : PushMessage {
+data class NewChatMsgMessage (val fromUserId: Long,
+                              val fromUserName: String,
+                              val message: String) : PushMessage {
 
     override fun getMessageType(): String {
         return "NewChatMessage"

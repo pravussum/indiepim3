@@ -27,19 +27,16 @@ public class MsgAccountSynchroService implements MessageConstants {
 	private final ConnectionUtils connectionUtils;
 	private final PersistenceHelper persistenceHelper;
 	private final PushMessageService pushMessageService;
-	private final IncomingMessageHandlerFactory incomingMessageHandlerFactory;
 	private final FolderSynchroService folderSynchroService;
 
 	@Inject
     public MsgAccountSynchroService(ConnectionUtils connectionUtils,
 									PersistenceHelper persistenceHelper,
 									PushMessageService pushMessageService,
-									IncomingMessageHandlerFactory incomingMessageHandlerFactory,
 									FolderSynchroService folderSynchroService) {
 		this.connectionUtils = connectionUtils;
 		this.persistenceHelper = persistenceHelper;
 		this.pushMessageService = pushMessageService;
-		this.incomingMessageHandlerFactory = incomingMessageHandlerFactory;
 		this.folderSynchroService = folderSynchroService;
 	}
 
@@ -58,13 +55,11 @@ public class MsgAccountSynchroService implements MessageConstants {
 			hashCache.clear();
 
 			final Session session = connectionUtils.getSession(account, true);
-			/* Handlers */
-			final IncomingMessageHandler updateHandler = incomingMessageHandlerFactory.getIncomingMessageHandler(updateMode);
 
 			try (Store store = connectionUtils.connectToStore(account, session)) {
 				boolean newMessages = false;
 				for (Folder folder : store.getDefaultFolder().list("*")) {
-					newMessages |= folderSynchroService.synchronizeFolder(account, updateMode, session, updateHandler, (IMAPFolder) folder, hashCache);
+					newMessages |= folderSynchroService.synchronizeFolder(account, updateMode, session, (IMAPFolder) folder, hashCache);
 				}
 
 				final Date lastSyncRun = persistenceHelper.updateLastSyncRun(user, account.getId());
