@@ -56,7 +56,7 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
                 msgAccountSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Account synchronisation failed", e);
         }
 	}
 }

@@ -47,7 +47,7 @@ constructor(private val tagDAO: TagDAO, private val genericDAO: GenericDAO,
             store.connect(account.host, account.port!!, account.username, password)
             return store
         } catch (e: MessagingException) {
-            throw RuntimeException("Connecting to message store failed for account $account.id ($account.host:$account.port)", e)
+            throw RuntimeException("Connecting to message store failed for account $account.id (${account.host}:${account.port})", e)
         }
     }
 
@@ -61,7 +61,7 @@ constructor(private val tagDAO: TagDAO, private val genericDAO: GenericDAO,
             transport.connect(account.outgoingHost, port!!, account.email, password)
             return transport
         } catch (e: MessagingException) {
-            throw RuntimeException("Connection failed for account $account.id ($account.outgoingHost:$port)", e)
+            throw RuntimeException("Connection failed for account ${account.id} (${account.outgoingHost}:$port)", e)
         }
     }
 
