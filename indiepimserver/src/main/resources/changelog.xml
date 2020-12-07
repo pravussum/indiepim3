@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <include file="org/quartz/impl/jdbcjobstore/liquibase.quartz.init.xml" />
     <changeSet author="AmIEvil (generated)" id="1319026263161-1">
         <createTable tableName="address">
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
@@ -524,9 +525,9 @@
 		    <column name="trustInvalidSSLCertificates" type="boolean" />
 		</addColumn>    	
     </changeSet>
-    <changeSet author="AmIEvil" id="1319026263161-78" context="production">
-    	<sqlFile path="quartzSetup.mysql" />
-	</changeSet>    
+<!--    <changeSet author="AmIEvil" id="1319026263161-78" context="production">-->
+<!--    	<sqlFile path="quartzSetup.mysql" />-->
+<!--	</changeSet>    -->
     <changeSet author="AmIEvil" id="1319026263161-79">
 		<dropForeignKeyConstraint  constraintName="FK_MSG_MSG_ACC_ID"   baseTableName="message"/>
         <addForeignKeyConstraint baseColumnNames="msg_account_id" baseTableName="message" constraintName="FK_MSG_MSG_ACC_ID" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="msg_account" referencesUniqueColumn="false"/>

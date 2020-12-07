@@ -9,6 +9,7 @@ import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.mortalsilence.indiepim.server.calendar.googlerfc2445adapter.RRuleAdapter;
 import net.mortalsilence.indiepim.server.dao.CalendarDAO;
@@ -17,7 +18,7 @@ import net.mortalsilence.indiepim.server.domain.CalendarPO;
 import net.mortalsilence.indiepim.server.domain.EventPO;
 import net.mortalsilence.indiepim.server.domain.RecurrencePO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -75,10 +76,10 @@ public class ICSParser {
 
         for(int c=0; c<calendars.length; c++) {
             final Calendar curCalDavCal = calendars[c];
-            final Iterator<VEvent> it = curCalDavCal.getComponents(Component.VEVENT).iterator();
+            final Iterator<CalendarComponent> it = curCalDavCal.getComponents(Component.VEVENT).iterator();
             while (it.hasNext())
             {
-                final VEvent icsEvent = it.next();
+                final VEvent icsEvent = (VEvent) it.next();
                 EventPO event = calendarDAO.getEventByUidAndUser(icsEvent.getUid().getValue(), user.getId());
                 final Property etagProperty = icsEvent.getProperty(DavPropertyName.GETETAG.getName());
                 final String etag = etagProperty != null ? etagProperty.getValue() : null;
