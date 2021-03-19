@@ -33,7 +33,7 @@
     "ng2-ckeditor": "^1.2.0",
     "popper.js": "^1.14.1",
     "rxjs": "^5.5.7",
-    "ssri": "^5.3.0",
+    "ssri": "^8.0.1",
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
